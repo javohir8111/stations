@@ -445,11 +445,11 @@
             <img src="tstu.png" alt="Partner Logo 2" class="logo">
         </div>
         <div class="header-right">
-            <a href="profil.html" class="profile-link" title="Profil va Sozlamalar">👤</a>
-            <a href="note.html" class="notification-bell" title="Bildirishnomalar">
+            <a href="profil.html" class="profile-link" id="profile-link" title="Profil va Sozlamalar">👤</a>
+            <a href="note.html" class="notification-bell" id="notification-bell" title="Bildirishnomalar">
                 <span class="notification-badge">3</span>🔔
             </a>
-            <button class="logout-btn" onclick="confirmLogout()"></button>
+            <button class="logout-btn" onclick="confirmLogout()" id="logout-btn"></button>
         </div>
     </header>
 
@@ -461,7 +461,7 @@
         <h2 class="text-center" id="stationName">Stansiya Holati</h2>
 
         <div class="station-select">
-            <label for="stationSelect">Stansiyani tanlang:</label>
+            <label for="stationSelect" id="station-select-label">Stansiyani tanlang:</label>
             <select id="stationSelect" class="form-select" onchange="changeStation()">
                 <!-- Options JavaScript orqali to'ldiriladi -->
             </select>
@@ -565,13 +565,21 @@
                 chart_x_axis: "Vaqt",
                 chart_aria: "Poyezdlar bo'yicha harorat grafigi vaqt bo'yicha",
                 status_normal: "Normal",
-                status_trivoga_1: "TRIVOGA-1",
-                status_trivoga_2: "TRIVOGA-2",
+                status_trivoga_1: "TREVOGA-1",
+                status_trivoga_2: "TREVOGA-2",
                 priority_high: "Yuqori",
                 priority_medium: "O'rta",
                 train_alert: "Yuk tashovchi poyezd {id} — harorat: {temp}°C",
                 logout: "Chiqish",
-                confirm_logout: "Haqiqatdan ham tizimdan chiqmoqchimisiz?"
+                confirm_logout: "Haqiqatdan ham tizimdan chiqmoqchimisiz?",
+                profile_link_title: "Profil va Sozlamalar",
+                notification_bell_title: "Bildirishnomalar",
+                station_select_label: "Stansiyani tanlang:",
+                modal_title: "Poyezd Harorat Jadvali",
+                modal_col_axle: "G'ildirak O'qi",
+                modal_col_right: "O'ng (°C)",
+                modal_col_left: "Chap (°C)",
+                modal_close: "Yopish"
             },
             ru: {
                 title: "RailSafe - Состояние станций",
@@ -608,7 +616,15 @@
                 priority_medium: "Средний",
                 train_alert: "Грузовой поезд {id} — температура: {temp}°C",
                 logout: "Выход",
-                confirm_logout: "Вы действительно хотите выйти из системы?"
+                confirm_logout: "Вы действительно хотите выйти из системы?",
+                profile_link_title: "Профиль и настройки",
+                notification_bell_title: "Уведомления",
+                station_select_label: "Выберите станцию:",
+                modal_title: "Таблица температуры поезда",
+                modal_col_axle: "Ось колеса",
+                modal_col_right: "Правая (°C)",
+                modal_col_left: "Левая (°C)",
+                modal_close: "Закрыть"
             },
             en: {
                 title: "RailSafe - Stations Status",
@@ -645,7 +661,15 @@
                 priority_medium: "Medium",
                 train_alert: "Freight Train {id} — temperature: {temp}°C",
                 logout: "Logout",
-                confirm_logout: "Are you sure you want to log out?"
+                confirm_logout: "Are you sure you want to log out?",
+                profile_link_title: "Profile and Settings",
+                notification_bell_title: "Notifications",
+                station_select_label: "Select Station:",
+                modal_title: "Train Temperature Table",
+                modal_col_axle: "Wheel Axle",
+                modal_col_right: "Right (°C)",
+                modal_col_left: "Left (°C)",
+                modal_close: "Close"
             }
         };
 
@@ -691,8 +715,18 @@
             document.getElementById('alerts-title').textContent = translations[lang].alerts_title;
             document.getElementById('tempChart').setAttribute('aria-label', translations[lang].chart_aria);
             document.getElementById('avgTemp').innerHTML = `${translations[lang].avg_temp} <strong>Yuklanmoqda...</strong>`;
-            document.querySelector('.logout-btn').textContent = translations[lang].logout;
-            document.querySelector('.logout-btn').setAttribute('aria-label', translations[lang].logout);
+            document.getElementById('trainCount').innerHTML = `${translations[lang].train_count} <strong>Yuklanmoqda...</strong>`;
+            document.getElementById('currentTime').innerHTML = `${translations[lang].current_time} <strong>Yuklanmoqda...</strong>`;
+            document.getElementById('leftDevice').innerHTML = `${translations[lang].left_device} <strong>Yuklanmoqda...</strong>`;
+            document.getElementById('rightDevice').innerHTML = `${translations[lang].right_device} <strong>Yuklanmoqda...</strong>`;
+            document.getElementById('logout-btn').textContent = translations[lang].logout;
+            document.getElementById('profile-link').title = translations[lang].profile_link_title;
+            document.getElementById('notification-bell').title = translations[lang].notification_bell_title;
+            document.getElementById('station-select-label').textContent = translations[lang].station_select_label;
+            document.getElementById('modal-col-axle').textContent = translations[lang].modal_col_axle;
+            document.getElementById('modal-col-right').textContent = translations[lang].modal_col_right;
+            document.getElementById('modal-col-left').textContent = translations[lang].modal_col_left;
+            document.getElementById('modal-close').textContent = translations[lang].modal_close;
             initializeStationPage();
         }
 
@@ -751,7 +785,7 @@
             const now = new Date();
             const trainIds = [4925, 3004, 300, 2202, 3372, 3375, 4802, 5001, 6002];
             return trainIds.map((id, index) => {
-                const time = new Date(now.getTime() - (index + 1) * 300000);
+                const time = new Date(now.getTime() - (trainIds.length - index) * 300000);
                 const temp = Math.floor(Math.random() * (100 - 30) + 30);
                 return {
                     id: id,
@@ -865,7 +899,7 @@
         function openTrainModal(trainIndex) {
             try {
                 const train = currentTrains[trainIndex];
-                document.getElementById('modalTitle').textContent = `Poyezd-${train.id} Harorat Jadvali`;
+                document.getElementById('modalTitle').textContent = `${translations[currentLang].modal_title.replace('Poyezd', `Train-${train.id}`)}`;
                 const tbody = document.getElementById('tempsTable');
                 tbody.innerHTML = '';
                 const axleData = [];
