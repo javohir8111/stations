@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailSafe - Poyezdlar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous">
+    <style>
+         :root {
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --header-bg: #60d1decb;
+            --header-text: white;
+            --card-bg: white;
+            --border-color: #ddd;
+            --stats-primary: #007bff;
+            --input-bg: white;
+            --status-normal: #198754;
+            --status-warning: #ffc107;
+            --status-alarm: #dc3545;
+        }
+        
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --header-bg: #1e3a8a;
+            --header-text: #e0e0e0;
+            --card-bg: #2c2c2c;
+            --border-color: #444;
+            --stats-primary: #60a5fa;
+            --input-bg: #3a3a3a;
+            --status-normal: #4ade80;
+            --status-warning: #facc15;
+            --status-alarm: #f87171;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: var(--header-bg);
+            color: var(--header-text);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex-wrap: wrap;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        
+        .logo-container:hover {
+            opacity: 0.8;
+        }
+        
+        .logo {
+            height: 50px;
+            margin-right: 15px;
+            transition: transform 0.3s;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .profile-link {
+            background: none;
+            border: none;
+            color: var(--header-text);
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background 0.3s, transform 0.3s;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            text-decoration: none;
+        }
+        
+        .profile-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .profile-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            width: 12px;
+            height: 12px;
+            background: #4caf50;
+            border-radius: 50%;
+            border: 2px solid var(--header-bg);
+        }
+        
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: var(--header-text);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background 0.3s, transform 0.3s;
+            text-decoration: none;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 100px;
+            left: 20px;
+            z-index: 1000;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #e9ecef;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 120px auto 20px;
+            padding: 0 15px;
+        }
+        
+        h2 {
+            color: var(--stats-primary);
+            text-align: center;
+        }
+        
+        .table-responsive {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .table {
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+        
+        .table th {
+            background: var(--header-bg);
+            color: var(--header-text);
+            border: 1px solid var(--border-color);
+        }
+        
+        .table td {
+            border: 1px solid var(--border-color);
+        }
+        
+        .modal-table td {
+            vertical-align: middle;
+        }
+        
+        .search-input {
+            border-radius: 20px;
+            border: 1px solid #60d1de;
+            background: var(--input-bg);
+            color: var(--text-color);
+        }
+        
+        .search-input::placeholder {
+            color: #999;
+        }
+        
+        .train-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+        
+        .train-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status-badge.normal,
+        .normal {
+            color: var(--status-normal);
+        }
+        
+        .status-badge.warning,
+        .warning {
+            color: var(--status-warning);
+        }
+        
+        .status-badge.alarm,
+        .alarm {
+            color: var(--status-alarm);
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+        
+        .modal-header {
+            background: var(--header-bg);
+            color: var(--header-text);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .modal-body {
+            color: var(--text-color);
+        }
+        
+        .modal-footer {
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .modal-table {
+            background: var(--input-bg);
+            color: var(--text-color);
+        }
+        
+        .modal-table th,
+        .modal-table td {
+            text-align: center;
+            font-size: 0.9em;
+            border: 1px solid var(--border-color);
+        }
+        
+        .modal-table .normal {
+            color: var(--status-normal);
+        }
+        
+        .modal-table .warning {
+            color: var(--status-warning);
+        }
+        
+        .modal-table .alarm {
+            color: var(--status-alarm);
+        }
+        
+        .notification-bell {
+            position: relative;
+            font-size: 1.8rem;
+            color: var(--header-text);
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.3s ease, transform 0.3s ease;
+            animation: ring 2s linear infinite;
+        }
+        
+        .notification-bell:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        @keyframes ring {
+            0% {
+                transform: rotate(0deg);
+            }
+            10% {
+                transform: rotate(-25deg);
+            }
+            20% {
+                transform: rotate(25deg);
+            }
+            30% {
+                transform: rotate(-12.5deg);
+            }
+            40% {
+                transform: rotate(6.25deg);
+            }
+            50% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bounce 1s infinite;
+            font-weight: bold;
+        }
+        
+        @keyframes bounce {
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-5px);
+            }
+            60% {
+                transform: translateY(-3px);
+            }
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 200px;
+            margin-top: 20px;
+        }
+        /* Mobil responsive */
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 8px 12px;
+                gap: 10px;
+            }
+            .logo-container {
+                width: 100%;
+                justify-content: center;
+            }
+            .header-right {
+                width: 100%;
+                justify-content: flex-end;
+                gap: 10px;
+            }
+            .logo {
+                height: 40px;
+                margin-right: 8px;
+            }
+            .profile-link {
+                width: 36px;
+                height: 36px;
+                font-size: 1.6rem;
+            }
+            .back-btn {
+                top: 90px;
+                left: 10px;
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            .container {
+                margin: 100px auto 20px;
+                padding: 0 10px;
+            }
+            h2.text-center {
+                font-size: 1.5rem;
+            }
+            .search-input {
+                margin-bottom: 10px;
+            }
+            .col-md-6 {
+                padding: 0 5px;
+            }
+            .table-responsive {
+                font-size: 0.9em;
+            }
+            .btn-sm {
+                font-size: 0.8rem;
+                padding: 0.25rem 0.5rem;
+            }
+            .modal-dialog {
+                margin: 0.5rem;
+            }
+            .modal-lg {
+                max-width: 95%;
+            }
+            .notification-bell {
+                font-size: 1.5rem;
+                padding: 6px;
+            }
+            .chart-container {
+                height: 150px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo {
+                height: 35px;
+            }
+            .table th,
+            .table td {
+                padding: 0.5rem;
+                font-size: 0.8em;
+            }
+            .modal-table {
+                font-size: 0.75em;
+            }
+            .card-body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo-container" onclick="window.location.href='stations.html'">
+            <img src="asserts/railsafe.png" alt="RailSafe Logo" class="logo">
+            <img src="asserts/iconr.png" alt="Partner Logo 1" class="logo">
+            <img src="asserts/tstu.png" alt="Partner Logo 2" class="logo">
+        </div>
+        <div class="header-right">
+            <a href="profil.html" class="profile-link" title="Profil va Sozlamalar">👤</a>
+            <a href="note.html" class="notification-bell" title="Bildirishnomalar">
+                <span class="notification-badge">3</span>🔔
+            </a>
+            <button class="logout-btn" onclick="logout()">Chiqish</button>
+        </div>
+    </header>
+
+    <button class="back-btn" onclick="window.location='stations.html'" aria-label="Back" id="back-btn">
+        <i class="fas fa-arrow-left"></i> Orqaga
+    </button>
+
+    <main class="container mt-3">
+        <h2 class="text-center" id="trains-title">Poyezdlar Ro'yxati</h2>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <input type="text" class="form-control search-input" id="searchInput" placeholder="Poyezd ID yoki tarkib bo'yicha qidirish...">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" id="freight-trains-title">Yuk Tashish Poyezdlari</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle" aria-label="Trains List" id="trains-table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" id="table-col-id">T/r</th>
+                                <th scope="col" id="table-col-name">Poyezd ID</th>
+                                <th scope="col" id="table-col-composition">Harakat Tarkibi</th>
+                                <th scope="col" id="table-col-risk">Xavf Ehtimoli</th>
+                                <th scope="col" id="table-col-time">Vaqt</th>
+                                <th scope="col" id="table-col-actions">Amallar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trainsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="trainDetailsModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Poyezd Harorat Jadvali</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="modal-close-btn"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- Dinamik kontent bu yerda -->
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal" id="modal-close">Yopish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        const translations = {
+            uz: {
+                title: "RailSafe - Poyezdlar",
+                back_btn: "Orqaga",
+                trains_title: "Poyezdlar Ro'yxati",
+                freight_trains_title: "Yuk Tashish Poyezdlari",
+                table_col_id: "T/r",
+                table_col_name: "Poyezd ID",
+                table_col_composition: "Harakat Tarkibi",
+                table_col_risk: "Xavf Ehtimoli",
+                table_col_time: "Vaqt",
+                table_col_actions: "Amallar",
+                modal_title: "Poyezd {name} Harorat Jadvali",
+                modal_col_axle: "G'ildirak O'qi",
+                modal_col_right: "O'ng (°C)",
+                modal_col_left: "Chap (°C)",
+                modal_col_status: "Holati",
+                modal_close: "Yopish",
+                modal_close_aria: "Yopish",
+                risk_none: "Yo'q",
+                risk_vagon_prefix: "Vagon ",
+                vagon_title: "Vagon {number}",
+                view_btn_aria: "Poyezd {name} haroratini ko'rish",
+                table_aria: "Poyezdlar ro'yxati",
+                modal_table_aria: "Poyezd harorat jadvali",
+                search_placeholder: "Poyezd ID yoki tarkib bo'yicha qidirish...",
+                status_normal: "Normal",
+                status_trivoga_1: "TRIVOGA-1",
+                status_trivoga_2: "TRIVOGA-2",
+                logout: "Chiqish",
+                chart_title: "Vagon Harorat Grafigi",
+                chart_label: "Harorat (°C)",
+                chart_avg_label: "O'rtacha ({temp}°C)"
+            },
+            ru: {
+                title: "RailSafe - Поезда",
+                back_btn: "Назад",
+                trains_title: "Список поездов",
+                freight_trains_title: "Грузовые поезда",
+                table_col_id: "№",
+                table_col_name: "ID поезда",
+                table_col_composition: "Состав поезда",
+                table_col_risk: "Вероятность риска",
+                table_col_time: "Время",
+                table_col_actions: "Действия",
+                modal_title: "Таблица температур поезда {name}",
+                modal_col_axle: "Ось колеса",
+                modal_col_right: "Правая (°C)",
+                modal_col_left: "Левая (°C)",
+                modal_col_status: "Состояние",
+                modal_close: "Закрыть",
+                modal_close_aria: "Закрыть",
+                risk_none: "Нет",
+                risk_vagon_prefix: "Вагон ",
+                vagon_title: "Вагон {number}",
+                view_btn_aria: "Просмотреть температуры поезда {name}",
+                table_aria: "Список поездов",
+                modal_table_aria: "Таблица температур поезда",
+                search_placeholder: "Поиск по ID поезда или составу...",
+                status_normal: "Нормально",
+                status_trivoga_1: "ТРЕВОГА-1",
+                status_trivoga_2: "ТРЕВОГА-2",
+                logout: "Выход",
+                chart_title: "График температуры вагона",
+                chart_label: "Температура (°C)",
+                chart_avg_label: "Средняя ({temp}°C)"
+            },
+            en: {
+                title: "RailSafe - Trains",
+                back_btn: "Back",
+                trains_title: "List of Trains",
+                freight_trains_title: "Freight Trains",
+                table_col_id: "ID",
+                table_col_name: "Train ID",
+                table_col_composition: "Train Composition",
+                table_col_risk: "Risk Probability",
+                table_col_time: "Time",
+                table_col_actions: "Actions",
+                modal_title: "Train {name} Temperature Table",
+                modal_col_axle: "Wheel Axle",
+                modal_col_right: "Right (°C)",
+                modal_col_left: "Left (°C)",
+                modal_col_status: "Status",
+                modal_close: "Close",
+                modal_close_aria: "Close",
+                risk_none: "None",
+                risk_vagon_prefix: "Car ",
+                vagon_title: "Car {number}",
+                view_btn_aria: "View temperatures for train {name}",
+                table_aria: "List of trains",
+                modal_table_aria: "Train temperature table",
+                search_placeholder: "Search by Train ID or composition...",
+                status_normal: "Normal",
+                status_trivoga_1: "ALARM-1",
+                status_trivoga_2: "ALARM-2",
+                logout: "Logout",
+                chart_title: "Car Temperature Chart",
+                chart_label: "Temperature (°C)",
+                chart_avg_label: "Average ({temp}°C)"
+            }
+        };
+
+        let currentLang = localStorage.getItem('language') || 'uz';
+        let currentTheme = localStorage.getItem('theme') || 'light';
+        let allTrains = [];
+        let tempChart = null;
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            document.documentElement.lang = lang;
+            document.title = translations[lang].title;
+            document.getElementById('back-btn').innerHTML = `<i class="fas fa-arrow-left"></i> ${translations[lang].back_btn}`;
+            document.getElementById('back-btn').setAttribute('aria-label', translations[lang].back_btn);
+            document.getElementById('trains-title').textContent = translations[lang].trains_title;
+            document.getElementById('freight-trains-title').textContent = translations[lang].freight_trains_title;
+            document.getElementById('table-col-id').textContent = translations[lang].table_col_id;
+            document.getElementById('table-col-name').textContent = translations[lang].table_col_name;
+            document.getElementById('table-col-composition').textContent = translations[lang].table_col_composition;
+            document.getElementById('table-col-risk').textContent = translations[lang].table_col_risk;
+            document.getElementById('table-col-time').textContent = translations[lang].table_col_time;
+            document.getElementById('table-col-actions').textContent = translations[lang].table_col_actions;
+            document.getElementById('trains-table').setAttribute('aria-label', translations[lang].table_aria);
+            document.getElementById('searchInput').placeholder = translations[lang].search_placeholder;
+            document.querySelector('.logout-btn').textContent = translations[lang].logout;
+            initializeTrainsPage();
+        }
+
+        function toggleTheme() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        function initializeTrainsPage() {
+            const baseTrains = [{
+                id: 4802,
+                composition: '2+55',
+                riskNumbers: [],
+                timeOffset: 0
+            }, {
+                id: 3004,
+                composition: '1+48',
+                riskNumbers: [23, 25],
+                timeOffset: 300000
+            }, {
+                id: 300,
+                composition: '3+52',
+                riskNumbers: [1, 3, 5],
+                timeOffset: 600000
+            }, {
+                id: 2202,
+                composition: '1+50',
+                riskNumbers: [41],
+                timeOffset: 900000
+            }, {
+                id: 3372,
+                composition: '2+47',
+                riskNumbers: [],
+                timeOffset: 1200000
+            }, {
+                id: 3375,
+                composition: '1+54',
+                riskNumbers: [12, 15, 20],
+                timeOffset: 1500000
+            }, {
+                id: 4925,
+                composition: '3+49',
+                riskNumbers: [],
+                timeOffset: 1800000
+            }, {
+                id: 3552,
+                composition: '1+51',
+                riskNumbers: [30, 35, 40],
+                timeOffset: 2100000
+            }, {
+                id: 6001,
+                composition: '2+60',
+                riskNumbers: [10, 12],
+                timeOffset: 2400000
+            }, {
+                id: 7002,
+                composition: '1+45',
+                riskNumbers: [8],
+                timeOffset: 2700000
+            }];
+
+            allTrains = baseTrains.map(trainBase => {
+                const now = new Date();
+                const time = new Date(now.getTime() - trainBase.timeOffset).toLocaleString(currentLang === 'uz' ? 'uz-UZ' : currentLang === 'ru' ? 'ru-RU' : 'en-US', {
+                    timeZone: 'Asia/Tashkent'
+                });
+                const train = {
+                    id: trainBase.id,
+                    name: `${translations[currentLang].freight_trains_title} ${trainBase.id}`,
+                    composition: trainBase.composition,
+                    riskNumbers: trainBase.riskNumbers,
+                    time: time,
+                    wagons: {}
+                };
+
+                trainBase.riskNumbers.forEach(num => {
+                    const baseTemp = Math.floor(Math.random() * (100 - 30) + 30); // 30-100°C
+                    const axleData = [];
+                    for (let i = 0; i < 4; i++) { // 6 ta o'q
+                        let temp;
+                        if (i < 2) {
+                            temp = baseTemp;
+                        } else {
+                            temp = baseTemp - (10 + i * 5);
+                        }
+                        const variation = Math.floor(Math.random() * 5) - 2;
+                        const right = Math.max(30, temp + variation).toFixed(1);
+                        const left = Math.max(30, parseFloat(right) + (Math.random() * 4 - 2)).toFixed(1);
+                        axleData.push({
+                            right,
+                            left
+                        });
+                    }
+                    train.wagons[num] = {
+                        right_temps: axleData.map(d => d.right),
+                        left_temps: axleData.map(d => d.left)
+                    };
+                });
+
+                return train;
+            });
+
+            renderTrainsTable(allTrains);
+
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredTrains = allTrains.filter(train =>
+                    train.id.toString().includes(searchTerm) ||
+                    train.composition.toLowerCase().includes(searchTerm)
+                );
+                renderTrainsTable(filteredTrains);
+            });
+        }
+
+        function renderTrainsTable(trains) {
+            const trainsTable = document.getElementById('trainsTable');
+            trainsTable.innerHTML = '';
+            trains.forEach((train, index) => {
+                const tr = document.createElement('tr');
+                const hasRisk = train.riskNumbers.length > 0;
+                const riskDisplay = hasRisk ?
+                    translations[currentLang].risk_vagon_prefix + train.riskNumbers.join(', ') :
+                    translations[currentLang].risk_none;
+                const riskClass = hasRisk ? 'warning' : 'normal';
+                const buttonDisabled = !hasRisk ? 'disabled' : '';
+                const buttonClass = hasRisk ? 'btn-primary' : 'btn-secondary';
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><strong>${train.id}</strong></td>
+                    <td>${train.composition}</td>
+                    <td><span class="status-badge ${riskClass}">${riskDisplay}</span></td>
+                    <td><small>${train.time}</small></td>
+                    <td><button class="btn ${buttonClass} btn-sm ${buttonDisabled}" data-train-id="${train.id}" aria-label="${translations[currentLang].view_btn_aria.replace('{name}', train.name)}" ${buttonDisabled ? 'disabled' : ''}>Ko'rish</button></td>
+                `;
+                trainsTable.appendChild(tr);
+            });
+
+            document.querySelectorAll('#trainsTable button:not([disabled])').forEach(button => {
+                button.addEventListener('click', () => {
+                    const trainId = parseInt(button.getAttribute('data-train-id'));
+                    const train = allTrains.find(t => t.id === trainId);
+                    if (train) showTrainTemps(train);
+                });
+            });
+        }
+
+        function showTrainTemps(train) {
+            document.getElementById('modalTitle').textContent = translations[currentLang].modal_title.replace('{name}', train.name);
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = '';
+
+            train.riskNumbers.forEach(num => {
+                const wagon = train.wagons[num];
+                const wagonTitle = translations[currentLang].vagon_title.replace('{number}', num);
+                const tableHtml = `
+                    <div class="mb-3">
+                        <h6 class="mb-2">${wagonTitle}</h6>
+                        <table class="table table-bordered modal-table" aria-label="${translations[currentLang].modal_table_aria} - ${wagonTitle}">
+                            <thead>
+                                <tr>
+                                    <th scope="col">${translations[currentLang].modal_col_axle}</th>
+                                    <th scope="col">${translations[currentLang].modal_col_right}</th>
+                                    <th scope="col">${translations[currentLang].modal_col_left}</th>
+                                    <th scope="col">${translations[currentLang].modal_col_status}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                let tbodyHtml = '';
+                for (let i = 0; i < wagon.right_temps.length; i++) {
+                    const axle = i + 1;
+                    const right = wagon.right_temps[i];
+                    const left = wagon.left_temps[i];
+                    const rightClass = getTemperatureStatusClass(right);
+                    const leftClass = getTemperatureStatusClass(left);
+                    const rightStatus = getTemperatureStatus(right);
+                    const leftStatus = getTemperatureStatus(left);
+                    tbodyHtml += `
+                        <tr>
+                            <td>${axle}</td>
+                            <td class="${rightClass}">${right} °C</td>
+                            <td class="${leftClass}">${left} °C</td>
+                            <td>
+                                <span class="badge ${rightClass === 'normal' ? 'bg-success' : rightClass === 'warning' ? 'bg-warning' : 'bg-danger'}">${rightStatus}</span>
+                                <span class="badge ${leftClass === 'normal' ? 'bg-success' : leftClass === 'warning' ? 'bg-warning' : 'bg-danger'} ms-1">${leftStatus}</span>
+                            </td>
+                        </tr>
+                    `;
+                }
+                const fullTableHtml = tableHtml + tbodyHtml + '</tbody></table>';
+                modalBody.innerHTML += fullTableHtml;
+
+                // Harorat grafigi qo'shish
+                const avgTemp = ((wagon.right_temps.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) +
+                        wagon.left_temps.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)) /
+                    (wagon.right_temps.length + wagon.left_temps.length)).toFixed(1);
+                const chartHtml = `
+                    <div class="chart-container">
+                        <h6>${translations[currentLang].chart_title}</h6>
+                        <canvas id="wagonChart${num}" aria-label="Wagon temperature chart"></canvas>
+                    </div>
+                `;
+                modalBody.innerHTML += chartHtml;
+
+                const ctx = document.getElementById(`wagonChart${num}`).getContext('2d');
+                const pointColorsRight = wagon.right_temps.map(temp =>
+                    temp < 45 ? 'rgba(25, 135, 84, 0.8)' :
+                    temp <= 84 ? 'rgba(255, 193, 7, 0.8)' :
+                    'rgba(220, 53, 69, 0.8)');
+                const pointColorsLeft = wagon.left_temps.map(temp =>
+                    temp < 45 ? 'rgba(25, 135, 84, 0.8)' :
+                    temp <= 84 ? 'rgba(255, 193, 7, 0.8)' :
+                    'rgba(220, 53, 69, 0.8)');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: wagon.right_temps.map((_, i) => `O'q ${i + 1}`),
+                        datasets: [{
+                            label: translations[currentLang].modal_col_right,
+                            data: wagon.right_temps,
+                            borderColor: '#003366',
+                            backgroundColor: 'rgba(0,51,102,0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: pointColorsRight,
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            lineWidth: 3
+                        }, {
+                            label: translations[currentLang].modal_col_left,
+                            data: wagon.left_temps,
+                            borderColor: '#ff4444',
+                            backgroundColor: 'rgba(255,68,68,0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: pointColorsLeft,
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            lineWidth: 3
+                        }, {
+                            label: translations[currentLang].chart_avg_label.replace('{temp}', avgTemp),
+                            data: Array(wagon.right_temps.length).fill(avgTemp),
+                            borderColor: '#ff9800',
+                            borderDash: [10, 5],
+                            fill: false,
+                            pointRadius: 0,
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                min: 20,
+                                max: 110,
+                                title: {
+                                    display: true,
+                                    text: translations[currentLang].chart_label,
+                                    font: {
+                                        size: 12,
+                                        weight: 'bold'
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(0,0,0,0.1)'
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '°C';
+                                    }
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: translations[currentLang].modal_col_axle,
+                                    font: {
+                                        size: 12,
+                                        weight: 'bold'
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(0,0,0,0.1)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    font: {
+                                        size: 11
+                                    },
+                                    usePointStyle: true
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0,0,0,0.8)',
+                                titleColor: 'white',
+                                bodyColor: 'white',
+                                borderColor: '#003366',
+                                borderWidth: 1,
+                                callbacks: {
+                                    title: function(context) {
+                                        return `${translations[currentLang].vagon_title.replace('{number}', num)} - O'q ${context[0].dataIndex + 1}`;
+                                    },
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) label += ': ';
+                                        label += context.parsed.y + '°C';
+                                        if (context.datasetIndex < 2) {
+                                            label += ` - ${getTemperatureStatus(context.parsed.y)}`;
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeInOutQuart'
+                        }
+                    }
+                });
+            });
+
+            new bootstrap.Modal(document.getElementById('trainDetailsModal')).show();
+        }
+
+        function getTemperatureStatusClass(temp) {
+            if (temp < 45) return 'normal';
+            if (temp <= 84) return 'warning';
+            return 'alarm';
+        }
+
+        function getTemperatureStatus(temp) {
+            if (temp < 45) return translations[currentLang].status_normal;
+            if (temp <= 84) return translations[currentLang].status_trivoga_1;
+            return translations[currentLang].status_trivoga_2;
+        }
+
+        function initializePage() {
+            setLanguage(currentLang);
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => setLanguage(btn.getAttribute('data-lang')));
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+
+</html>
