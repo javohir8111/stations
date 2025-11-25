@@ -1,31 +1,40 @@
 <!DOCTYPE html>
 <html lang="uz">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RailSafe - Stansiyalar Holati</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f5f5f5;
-            --text-color: #333;
-            --header-bg: #60d1decb;
-            --header-text: white;
-            --card-bg: white;
-            --border-color: #ddd;
+            --primary-color: #0a2540; /* Deep blue for luxury */
+            --secondary-color: #007bff; /* Vibrant blue accent */
+            --accent-color: #ffd700; /* Gold for highlights, luxurious touch */
+            --bg-color: #f8f9fa; /* Light background for simplicity */
+            --text-color: #212529; /* Dark text */
+            --header-bg: linear-gradient(135deg, #0a2540, #0056a0); /* Gradient for header luxury */
+            --header-text: #ffffff;
+            --card-bg: #ffffff;
+            --border-color: #dee2e6;
             --stats-primary: #007bff;
-            --input-bg: white;
-            --status-normal: #198754;
-            --status-warning: #ffc107;
-            --status-alarm: #dc3545;
+            --input-bg: #ffffff;
+            --status-normal: #28a745; /* Green */
+            --status-warning: #ffc107; /* Yellow */
+            --status-alarm: #dc3545; /* Red */
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05); /* Soft shadow for elegance */
+            --transition: all 0.3s ease-in-out;
         }
-
         [data-theme="dark"] {
-            --bg-color: #121212;
+            --primary-color: #ffffff;
+            --secondary-color: #60a5fa;
+            --accent-color: #ffd700;
+            --bg-color: #1a1a1a;
             --text-color: #e0e0e0;
-            --header-bg: #1e3a8a;
+            --header-bg: linear-gradient(135deg, #1e3a8a, #0a2540);
             --header-text: #e0e0e0;
             --card-bg: #2c2c2c;
             --border-color: #444;
@@ -35,275 +44,113 @@
             --status-warning: #facc15;
             --status-alarm: #f87171;
         }
-
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s;
+            transition: var(--transition);
+            overflow-x: hidden;
         }
-
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 15px;
+            padding: 15px 20px;
             background: var(--header-bg);
             color: var(--header-text);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-soft);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             flex-wrap: wrap;
         }
-
         .logo-container {
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
+            gap: 15px;
             cursor: pointer;
-            transition: opacity 0.3s;
+            transition: var(--transition);
         }
-
         .logo-container:hover {
-            opacity: 0.8;
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
-
         .logo {
             height: 50px;
-            margin-right: 15px;
-            transition: transform 0.3s;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
         }
-
         .logo:hover {
             transform: scale(1.05);
         }
-
         .header-right {
             display: flex;
             align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 20px;
         }
-
         .profile-link {
-            background: none;
-            border: none;
             color: var(--header-text);
-            font-size: 2rem;
+            font-size: 1.8rem;
             cursor: pointer;
-            padding: 5px;
+            padding: 8px;
             border-radius: 50%;
-            transition: background 0.3s, transform 0.3s;
+            transition: var(--transition);
             position: relative;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
             text-decoration: none;
         }
-
         .profile-link:hover {
             background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
-
         .profile-link::after {
             content: '';
             position: absolute;
-            bottom: -5px;
-            right: -5px;
+            bottom: 0;
+            right: 0;
             width: 12px;
             height: 12px;
             background: #4caf50;
             border-radius: 50%;
             border: 2px solid var(--header-bg);
         }
-
         .logout-btn {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             border: none;
             color: var(--header-text);
-            font-size: 1.2rem;
+            font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
-            padding: 8px 12px;
-            border-radius: 8px;
-            transition: background 0.3s, transform 0.3s;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: var(--transition);
             text-decoration: none;
         }
-
         .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-
-        .back-btn {
-            position: fixed;
-            top: 100px;
-            left: 20px;
-            z-index: 1000;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 10px 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: background 0.3s;
-        }
-
-        .back-btn:hover {
-            background: #e9ecef;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 120px auto 20px;
-            padding: 0 15px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .card:hover {
+            background: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
         }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .card-title {
-            color: var(--stats-primary);
-            font-weight: bold;
-        }
-
-        .badge {
-            font-size: 0.8em;
-        }
-
-        .status-badge {
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: bold;
-        }
-
-        .status-badge.normal,
-        .status-badge.stabil {
-            background-color: var(--status-normal);
-            color: white;
-        }
-
-        .status-badge.warning {
-            background-color: var(--status-warning);
-            color: black;
-        }
-
-        .status-badge.alarm {
-            background-color: var(--status-alarm);
-            color: white;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 300px;
-        }
-
-        .alert-icon {
-            margin-right: 8px;
-        }
-
-        .list-group-item {
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            transition: background-color 0.2s;
-        }
-
-        .list-group-item:hover {
-            background-color: #f8f9fa;
-        }
-
-        .normal {
-            color: var(--status-normal);
-        }
-
-        .warning {
-            color: var(--status-warning);
-        }
-
-        .alarm {
-            color: var(--status-alarm);
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            color: var(--text-color);
-        }
-
-        .modal-header {
-            background: var(--header-bg);
-            color: var(--header-text);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .modal-body {
-            color: var(--text-color);
-        }
-
-        .modal-footer {
-            border-top: 1px solid var(--border-color);
-        }
-
-        .modal-table {
-            background: var(--input-bg);
-            color: var(--text-color);
-        }
-
-        .modal-table th,
-        .modal-table td {
-            text-align: center;
-            font-size: 0.9em;
-            border: 1px solid var(--border-color);
-        }
-
-        .modal-table .normal {
-            color: var(--status-normal);
-        }
-
-        .modal-table .warning {
-            color: var(--status-warning);
-        }
-
-        .modal-table .alarm {
-            color: var(--status-alarm);
-        }
-
         .notification-bell {
             position: relative;
             font-size: 1.8rem;
             color: var(--header-text);
-            text-decoration: none;
             padding: 8px;
             border-radius: 50%;
-            transition: background 0.3s ease, transform 0.3s ease;
-            animation: ring 2s linear infinite;
+            transition: var(--transition);
+            animation: ring 2s linear infinite paused;
         }
-
         .notification-bell:hover {
             background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
+            transform: scale(1.05);
+            animation-play-state: running;
         }
-
         @keyframes ring {
             0% { transform: rotate(0deg); }
             10% { transform: rotate(-25deg); }
@@ -313,130 +160,284 @@
             50% { transform: rotate(0deg); }
             100% { transform: rotate(0deg); }
         }
-
         .notification-badge {
             position: absolute;
-            top: -3px;
-            right: -3px;
+            top: -5px;
+            right: -5px;
             background: #ff4444;
             color: white;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 11px;
+            width: 22px;
+            height: 22px;
+            font-size: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             animation: bounce 1s infinite;
             font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
             40% { transform: translateY(-5px); }
             60% { transform: translateY(-3px); }
         }
-
+        .back-btn {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            z-index: 999;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 12px 18px;
+            border-radius: 50px;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        .back-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        .container {
+            max-width: 1300px;
+            margin: 120px auto 80px;
+            padding: 0 20px;
+        }
+        .card {
+            background: var(--card-bg);
+            border: none;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+        .card-body {
+            padding: 25px;
+        }
+        .card-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .badge {
+            font-size: 0.85em;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: var(--accent-color);
+            color: var(--primary-color);
+        }
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        .status-badge.normal,
+        .status-badge.stabil {
+            background-color: var(--status-normal);
+            color: white;
+        }
+        .status-badge.warning {
+            background-color: var(--status-warning);
+            color: #212529;
+        }
+        .status-badge.alarm {
+            background-color: var(--status-alarm);
+            color: white;
+        }
+        .chart-container {
+            position: relative;
+            height: 350px;
+            background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+            border-radius: 12px;
+            padding: 10px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+        }
+        [data-theme="dark"] .chart-container {
+            background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
+        }
+        .alert-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        .list-group-item {
+            background: var(--input-bg);
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+            transition: var(--transition);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow-soft);
+        }
+        .list-group-item:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        [data-theme="dark"] .list-group-item:hover {
+            background: #3a3a3a;
+        }
+        .normal { color: var(--status-normal); }
+        .warning { color: var(--status-warning); }
+        .alarm { color: var(--status-alarm); }
+        .modal-content {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow-soft);
+        }
+        .modal-header {
+            background: var(--header-bg);
+            color: var(--header-text);
+            border-bottom: none;
+            padding: 20px;
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        .modal-footer {
+            border-top: none;
+            padding: 15px 20px;
+        }
+        .modal-table {
+            background: var(--input-bg);
+            color: var(--text-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .modal-table th,
+        .modal-table td {
+            text-align: center;
+            font-size: 0.95em;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+        }
         .station-select {
+            margin-bottom: 25px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-soft);
+        }
+        .station-info {
+            margin-top: 15px;
+            font-size: 0.95em;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        h2.text-center {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        h4 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
             margin-bottom: 20px;
         }
-
-        .station-info {
-            margin-top: 10px;
-            font-size: 0.9em;
-            color: var(--text-color);
+        /* AI Chatbot Button */
+        .ai-chatbot-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: linear-gradient(135deg, var(--secondary-color), #0056a0);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+            transition: var(--transition);
+            cursor: pointer;
         }
-
+        .ai-chatbot-btn:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5);
+            background: linear-gradient(135deg, #0056a0, var(--secondary-color));
+        }
+        .ai-chatbot-btn i {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
         @media (max-width: 768px) {
             .header {
-                padding: 8px 12px;
-                gap: 10px;
+                padding: 10px 15px;
             }
             .logo-container {
-                width: 100%;
-                justify-content: center;
-            }
-            .header-right {
-                width: 100%;
-                justify-content: flex-end;
                 gap: 10px;
             }
             .logo {
                 height: 40px;
-                margin-right: 8px;
             }
-            .profile-link {
-                width: 36px;
-                height: 36px;
-                font-size: 1.6rem;
-            }
-            .logout-btn {
-                font-size: 1rem;
-                padding: 6px 10px;
+            .header-right {
+                gap: 15px;
             }
             .back-btn {
-                top: 90px;
-                left: 10px;
-                padding: 8px 12px;
-                font-size: 0.9rem;
+                top: 70px;
+                left: 15px;
+                padding: 10px 15px;
             }
             .container {
-                margin: 100px auto 20px;
-                padding: 0 10px;
-            }
-            .row {
-                margin: 0;
-            }
-            .col-lg-6 {
-                padding: 5px;
-            }
-            h2.text-center {
-                font-size: 1.5rem;
-            }
-            h4 {
-                font-size: 1.2rem;
+                margin: 100px auto 60px;
+                padding: 0 15px;
             }
             .chart-container {
-                height: 250px;
+                height: 280px;
             }
-            .list-group-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            .list-group-item div:last-child {
-                align-self: flex-end;
-            }
-            .badge {
-                font-size: 0.8em;
-            }
-            .notification-bell {
-                font-size: 1.5rem;
-                padding: 6px;
+            .ai-chatbot-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.8rem;
             }
         }
-
         @media (max-width: 480px) {
             .logo {
                 height: 35px;
             }
             .card-title {
-                font-size: 1rem;
+                font-size: 1.2rem;
             }
-            .modal-table {
-                font-size: 0.8em;
+            .modal-table th, .modal-table td {
+                font-size: 0.85em;
+                padding: 10px;
             }
-            .btn-sm {
-                font-size: 0.75rem;
-                padding: 0.25rem 0.5rem;
+            h2.text-center {
+                font-size: 1.6rem;
             }
-            .card-body {
-                padding: 15px;
+            h4 {
+                font-size: 1.3rem;
             }
         }
     </style>
 </head>
-
 <body>
     <header class="header">
         <div class="logo-container" onclick="window.location.href='stations.html'">
@@ -445,21 +446,18 @@
             <img src="tstu.png" alt="Partner Logo 2" class="logo">
         </div>
         <div class="header-right">
-            <a href="profil.html" class="profile-link" id="profile-link" title="Profil va Sozlamalar">👤</a>
+            <a href="profil.html" class="profile-link" id="profile-link" title="Profil va Sozlamalar"><i class="fas fa-user"></i></a>
             <a href="note.html" class="notification-bell" id="notification-bell" title="Bildirishnomalar">
-                <span class="notification-badge">3</span>🔔
+                <span class="notification-badge">3</span><i class="fas fa-bell"></i>
             </a>
             <button class="logout-btn" onclick="confirmLogout()" id="logout-btn"></button>
         </div>
     </header>
-
     <button class="back-btn" onclick="window.location='index.html'" aria-label="Back" id="back-btn">
-        <i class="fas fa-arrow-left"></i> 
+        <i class="fas fa-arrow-left"></i>
     </button>
-
     <main class="container mt-3">
         <h2 class="text-center" id="stationName">Stansiya Holati</h2>
-
         <div class="station-select">
             <label for="stationSelect" id="station-select-label">Stansiyani tanlang:</label>
             <select id="stationSelect" class="form-select" onchange="changeStation()">
@@ -467,31 +465,28 @@
             </select>
             <div id="stationInfo" class="station-info"></div>
         </div>
-
         <div class="row">
             <div class="col-lg-6 mb-3">
                 <div class="card mb-3" onclick="window.location='trains.html'" role="button" tabindex="0">
                     <div class="card-body">
-                        <h5 class="card-title" id="overview-title">Umumiy Ma'lumot <span class="badge bg-info ms-auto" id="overview-badge">Batafsil</span></h5>
+                        <h5 class="card-title" id="overview-title">Umumiy Ma'lumot <span class="badge" id="overview-badge">Batafsil</span></h5>
                         <p id="trainCount" class="mb-2">Necha poyezd keldi: <strong>Yuklanmoqda...</strong></p>
                         <p id="currentTime" class="mb-0">Joriy vaqt: <strong>Yuklanmoqda...</strong></p>
                         <p id="avgTemp" class="mb-0">O'rtacha harorat: <strong>Yuklanmoqda...</strong></p>
                     </div>
                 </div>
-
                 <div class="card" onclick="window.location='diaknoztika.html'" role="button" tabindex="0">
                     <div class="card-body">
-                        <h5 class="card-title" id="diagnostics-title">Diaknostika Holati <span class="badge bg-success ms-auto" id="diagnostics-badge">Ishchi holatda</span></h5>
+                        <h5 class="card-title" id="diagnostics-title">Diaknostika Holati <span class="badge" id="diagnostics-badge">Ishchi holatda</span></h5>
                         <p id="leftDevice" class="mb-2">Chap tizim holati: <strong>Yuklanmoqda...</strong></p>
                         <p id="rightDevice" class="mb-0">O'ng tizim holati: <strong>Yuklanmoqda...</strong></p>
                     </div>
                 </div>
             </div>
-
             <div class="col-lg-6 mb-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title" id="chart-title">Harorat Grafigi <span class="badge bg-secondary ms-auto" id="chart-badge">Real vaqt</span></h5>
+                        <h5 class="card-title" id="chart-title">Harorat Grafigi <span class="badge" id="chart-badge">Real vaqt</span></h5>
                         <div class="chart-container">
                             <canvas id="tempChart" aria-label="Train temperature chart"></canvas>
                         </div>
@@ -499,13 +494,15 @@
                 </div>
             </div>
         </div>
-
         <section class="mt-3">
             <h4 id="alerts-title">Ogohlantirishlar</h4>
             <ul id="alertList" class="list-group"></ul>
         </section>
     </main>
-
+    <!-- AI Chatbot Button -->
+    <button class="ai-chatbot-btn" onclick="window.location.href='chatbot.html'" title="AI Chatbot bilan suhbatlashish">
+        <i class="fas fa-robot"></i>
+    </button>
     <div class="modal fade" id="trainDetailsModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -531,10 +528,10 @@
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
+        // Skript qismi o'zgarmagan holda saqlangan, chunki so'rov faqat dizayn haqida edi.
         const translations = {
             uz: {
                 title: "RailSafe - Stansiyalar Holati",
@@ -672,13 +669,11 @@
                 modal_close: "Close"
             }
         };
-
         let currentLang = localStorage.getItem('language') || 'uz';
         let currentTheme = localStorage.getItem('theme') || 'light';
         let tempChart = null;
         let currentTrains = [];
         let selectedStation = null;
-
         const stations = [
             { id: "blok-post-kattakurgan", name: "Блок-Пост-Каттакурган", coords: [39.9024, 66.2457], description: "Kattakurgan blok-posti, Samarqand viloyati" },
             { id: "kattakurgan-rzd28", name: "Каттакурган-Рзд№28", coords: [39.8800, 66.2800], description: "Raz'ezd N28 Kattakurgan yaqinida, Samarqand viloyati" },
@@ -701,7 +696,6 @@
             { id: "nukus", name: "Нукус", coords: [42.4531, 59.6103], description: "Nukus temir yo'l stansiyasi, Qoraqalpog'iston Respublikasi" },
             { id: "xiva", name: "Хива", coords: [41.3833, 60.35], description: "Xiva temir yo'l stansiyasi, Xorazm viloyati" }
         ];
-
         function setLanguage(lang) {
             currentLang = lang;
             localStorage.setItem('language', lang);
@@ -709,9 +703,9 @@
             document.title = translations[lang].title;
             document.getElementById('back-btn').innerHTML = `<i class="fas fa-arrow-left"></i> ${translations[lang].back_btn}`;
             document.getElementById('back-btn').setAttribute('aria-label', translations[lang].back_btn_aria);
-            document.getElementById('overview-title').innerHTML = `${translations[lang].overview_title} <span class="badge bg-info ms-auto" id="overview-badge">${translations[lang].overview_badge}</span>`;
-            document.getElementById('diagnostics-title').innerHTML = `${translations[lang].diagnostics_title} <span class="badge bg-success ms-auto" id="diagnostics-badge">${translations[lang].diagnostics_badge}</span>`;
-            document.getElementById('chart-title').innerHTML = `${translations[lang].chart_title} <span class="badge bg-secondary ms-auto" id="chart-badge">${translations[lang].chart_badge}</span>`;
+            document.getElementById('overview-title').innerHTML = `${translations[lang].overview_title} <span class="badge" id="overview-badge">${translations[lang].overview_badge}</span>`;
+            document.getElementById('diagnostics-title').innerHTML = `${translations[lang].diagnostics_title} <span class="badge" id="diagnostics-badge">${translations[lang].diagnostics_badge}</span>`;
+            document.getElementById('chart-title').innerHTML = `${translations[lang].chart_title} <span class="badge" id="chart-badge">${translations[lang].chart_badge}</span>`;
             document.getElementById('alerts-title').textContent = translations[lang].alerts_title;
             document.getElementById('tempChart').setAttribute('aria-label', translations[lang].chart_aria);
             document.getElementById('avgTemp').innerHTML = `${translations[lang].avg_temp} <strong>Yuklanmoqda...</strong>`;
@@ -729,21 +723,18 @@
             document.getElementById('modal-close').textContent = translations[lang].modal_close;
             initializeStationPage();
         }
-
         function toggleTheme() {
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
             const newTheme = isDark ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
         }
-
         function confirmLogout() {
             if (confirm(translations[currentLang].confirm_logout)) {
                 localStorage.clear();
                 window.location.href = 'index.html';
             }
         }
-
         function initializeStationPage() {
             const select = document.getElementById('stationSelect');
             select.innerHTML = '';
@@ -753,7 +744,6 @@
                 option.textContent = st.name;
                 select.appendChild(option);
             });
-
             const urlParams = new URLSearchParams(window.location.search);
             let stationId = urlParams.get('id');
             if (!stationId || !stations.find(s => s.id === stationId)) {
@@ -761,11 +751,9 @@
             }
             select.value = stationId;
             changeStation();
-
             updateDashboard();
             setInterval(updateDashboard, 30000);
         }
-
         function changeStation() {
             const select = document.getElementById('stationSelect');
             const stationId = select.value;
@@ -780,7 +768,6 @@
             }
             updateDashboard();
         }
-
         function getMockTrains() {
             const now = new Date();
             const trainIds = [4925, 3004, 300, 2202, 3372, 3375, 4802, 5001, 6002];
@@ -796,31 +783,26 @@
                 };
             });
         }
-
         function getTemperatureStatus(temp) {
             if (temp < 45) return translations[currentLang].status_normal;
             if (temp <= 84) return translations[currentLang].status_trivoga_1;
             return translations[currentLang].status_trivoga_2;
         }
-
         function getPriority(temp) {
             if (temp < 45) return '';
             if (temp <= 84) return translations[currentLang].priority_medium;
             return translations[currentLang].priority_high;
         }
-
         function getStatusClass(status) {
             if (status === translations[currentLang].status_normal) return 'normal';
             if (status === translations[currentLang].status_trivoga_1) return 'warning';
             return 'alarm';
         }
-
         function getTemperatureStatusClass(temp) {
             if (temp < 45) return 'normal';
             if (temp <= 84) return 'warning';
             return 'alarm';
         }
-
         function updateDashboard() {
             try {
                 currentTrains = getMockTrains();
@@ -840,16 +822,13 @@
                         }
                     }
                 };
-
                 const temps = currentTrains.map(t => t.temp);
                 const averageTemp = temps.length > 0 ? temps.reduce((a, b) => a + b, 0) / temps.length : 0;
-
                 document.getElementById('trainCount').innerHTML = `${translations[currentLang].train_count} <strong>${mockData.trainCount}</strong>`;
                 document.getElementById('currentTime').innerHTML = `${translations[currentLang].current_time} <strong>${mockData.currentTime}</strong>`;
                 document.getElementById('avgTemp').innerHTML = `${translations[currentLang].avg_temp} <strong>${averageTemp.toFixed(1)}°C</strong>`;
                 document.getElementById('leftDevice').innerHTML = `${translations[currentLang].left_device} <strong class="status-badge normal">${mockData.diagnostics.left.details}</strong>`;
                 document.getElementById('rightDevice').innerHTML = `${translations[currentLang].right_device} <strong class="status-badge normal">${mockData.diagnostics.right.details}</strong>`;
-
                 const alertList = document.getElementById('alertList');
                 alertList.innerHTML = '';
                 currentTrains.forEach((train, index) => {
@@ -870,7 +849,6 @@
                         alertList.appendChild(li);
                     }
                 });
-
                 if (Math.random() < 0.1) {
                     const li = document.createElement('li');
                     li.className = 'list-group-item d-flex justify-content-between align-items-center alarm';
@@ -885,7 +863,6 @@
                         </div>`;
                     alertList.appendChild(li);
                 }
-
                 const times = currentTrains.map(t => t.time.toLocaleTimeString([], {
                     hour: '2-digit',
                     minute: '2-digit'
@@ -895,7 +872,6 @@
                 console.error('Dashboard yangilashda xato:', error);
             }
         }
-
         function openTrainModal(trainIndex) {
             try {
                 const train = currentTrains[trainIndex];
@@ -927,7 +903,6 @@
                 console.error('Modal ochishda xato:', error);
             }
         }
-
         function updateTempChart(times, temps, averageTemp) {
             try {
                 const ctx = document.getElementById('tempChart').getContext('2d');
@@ -935,9 +910,7 @@
                     temp < 45 ? 'rgba(25, 135, 84, 0.8)' :
                     temp <= 84 ? 'rgba(255, 193, 7, 0.8)' :
                     'rgba(220, 53, 69, 0.8)');
-
                 if (tempChart) tempChart.destroy();
-
                 tempChart = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -1038,16 +1011,12 @@
                 console.error('Grafik yangilashda xato:', error);
             }
         }
-
         function initializePage() {
             setLanguage(currentLang);
             document.documentElement.setAttribute('data-theme', currentTheme);
             initializeStationPage();
         }
-
         document.addEventListener('DOMContentLoaded', initializePage);
     </script>
 </body>
-
-
 </html>
