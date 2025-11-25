@@ -1,15 +1,20 @@
+```html
 <!DOCTYPE html>
 <html lang="uz">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RailSafe AI - Aqlli Temir Yo'l Yordamchisi</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0a2540 0%, #0056a0 100%);
             --success-gradient: linear-gradient(135deg, #28a745 0%, #20c997 100%);
             --ai-gradient: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);
             --user-bubble: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
@@ -18,10 +23,13 @@
             --dark-text: #f8f9fa;
             --shadow-light: 0 15px 40px rgba(0, 0, 0, 0.15);
             --shadow-dark: 0 15px 40px rgba(0, 0, 0, 0.3);
+            --accent-color: #ffd700;
+            --border-radius: 30px;
+            --transition: all 0.3s ease;
         }
-        
+
         [data-theme="dark"] {
-            --primary-gradient: linear-gradient(135deg, #4b5e9e 0%, #5a3f8a 100%);
+            --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #0a2540 100%);
             --success-gradient: linear-gradient(135deg, #1e7e34 0%, #155724 100%);
             --ai-gradient: linear-gradient(135deg, #5a32a3 0%, #c71f7a 100%);
             --user-bubble: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
@@ -31,47 +39,48 @@
             --shadow-light: 0 15px 40px rgba(0, 0, 0, 0.3);
             --shadow-dark: 0 15px 40px rgba(255, 255, 255, 0.1);
         }
-        
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', sans-serif;
             background: var(--primary-gradient);
             margin: 0;
             padding: 10px;
             min-height: 100vh;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            color: var(--dark-text);
         }
-        
+
         .chat-container {
-            max-width: 650px;
+            max-width: 700px;
             margin: 0 auto;
-            background: white;
-            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
             box-shadow: var(--shadow-light);
             overflow: hidden;
-            height: 95vh;
+            height: calc(100vh - 20px);
             display: flex;
             flex-direction: column;
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: var(--transition);
         }
-        
+
         [data-theme="dark"] .chat-container {
-            background: var(--dark-bg);
+            background: rgba(26, 26, 26, 0.95);
             box-shadow: var(--shadow-dark);
-            border-color: rgba(0, 0, 0, 0.25);
+            border-color: rgba(0, 0, 0, 0.3);
         }
-        
+
         .chat-header {
             background: var(--success-gradient);
             color: white;
-            padding: 25px;
+            padding: 25px 20px;
             text-align: center;
             position: relative;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
-        
+
         .chat-header h1 {
             margin: 0;
             font-size: 2rem;
@@ -82,77 +91,34 @@
             font-weight: 700;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
-        
+
         .chat-header img.logo {
-            height: 45px;
-            width: auto;
+            height: 50px;
             border-radius: 50%;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
+            transition: var(--transition);
         }
-        
+
         .chat-header img.logo:hover {
             transform: scale(1.1);
         }
-        
+
         .chat-header p {
             margin: 8px 0 0;
             opacity: 0.95;
             font-size: 1rem;
             font-style: italic;
         }
-        
-        .lang-switcher {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            gap: 6px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px;
-            border-radius: 25px;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .lang-btn {
-            background: rgba(255, 255, 255, 0.3);
-            border: none;
-            color: white;
-            padding: 10px 14px;
-            font-size: 12px;
-            cursor: pointer;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .lang-btn:hover {
-            background: rgba(255, 255, 255, 0.5);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        
-        .lang-btn.active {
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            font-weight: bold;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-        }
-        
+
         .controls {
             position: absolute;
             top: 20px;
             right: 20px;
             display: flex;
-            gap: 10px;
+            gap: 15px;
             flex-wrap: wrap;
         }
-        
+
         .control-btn {
             background: rgba(255, 255, 255, 0.2);
             border: none;
@@ -160,311 +126,245 @@
             padding: 12px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            width: 45px;
-            height: 45px;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            width: 50px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(15px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .control-btn:hover {
             background: rgba(255, 255, 255, 0.35);
-            transform: scale(1.15) rotate(360deg);
+            transform: scale(1.1);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
-        
+
         .voice-btn {
             background: var(--ai-gradient);
-            color: white;
             animation: ai-glow 2s infinite alternate;
         }
-        
+
         @keyframes ai-glow {
-            from {
-                box-shadow: 0 0 5px rgba(111, 66, 193, 0.5);
-            }
-            to {
-                box-shadow: 0 0 20px rgba(111, 66, 193, 0.8);
-            }
+            from { box-shadow: 0 0 5px rgba(111, 66, 193, 0.5); }
+            to { box-shadow: 0 0 20px rgba(111, 66, 193, 0.8); }
         }
-        
+
         .voice-btn.listening {
-            background: #ff6b6b;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
             animation: pulse 0.8s infinite;
         }
-        
+
         @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
-        
+
         .clear-btn {
-            background: #dc3545;
-            color: white;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
         }
-        
+
         .clear-btn:hover {
-            background: #c82333;
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
         }
-        
+
         .forecast-btn {
-            background: #17a2b8;
-            color: white;
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
         }
-        
+
         .forecast-btn:hover {
-            background: #138496;
+            background: linear-gradient(135deg, #138496 0%, #117a8b 100%);
         }
-        
+
         .theme-toggle {
-            background: #6f42c1;
-            color: white;
+            background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
         }
-        
+
         .theme-toggle:hover {
-            background: #5a32a3;
+            background: linear-gradient(135deg, #5a32a3 0%, #4c2990 100%);
         }
-        
+
         .messages {
             flex: 1;
             overflow-y: auto;
             padding: 25px;
-            background: #f8f9fa;
+            background: rgba(248, 249, 250, 0.9);
             scroll-behavior: smooth;
             position: relative;
+            transition: var(--transition);
         }
-        
+
         [data-theme="dark"] .messages {
-            background: var(--dark-bg);
+            background: rgba(26, 26, 26, 0.9);
             color: var(--dark-text);
         }
-        
+
         .message {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             display: flex;
             align-items: flex-start;
             animation: fadeInSlide 0.5s ease-out;
-            opacity: 0;
-            transform: translateY(25px);
         }
-        
-        .message.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
+
         @keyframes fadeInSlide {
-            from {
-                opacity: 0;
-                transform: translateY(25px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .user-message {
             justify-content: flex-end;
         }
-        
+
         .user-message .bubble {
             background: var(--user-bubble);
             color: white;
-            border-radius: 30px 30px 10px 30px;
-            padding: 16px 20px;
+            border-radius: 25px 25px 5px 25px;
+            padding: 15px 20px;
             max-width: 80%;
             word-wrap: break-word;
-            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.25);
             position: relative;
-            font-weight: 500;
+            font-weight: 400;
+            font-size: 1rem;
         }
-        
+
         .bot-message .bubble {
             background: var(--bot-bubble);
-            color: #333;
-            border-radius: 30px 30px 30px 10px;
-            padding: 16px 20px;
+            color: #212529;
+            border-radius: 25px 25px 25px 5px;
+            padding: 15px 20px;
             max-width: 80%;
             word-wrap: break-word;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
             position: relative;
-            font-weight: 500;
+            font-weight: 400;
+            font-size: 1rem;
         }
-        
+
         [data-theme="dark"] .bot-message .bubble {
-            background: #343a40;
+            background: var(--bot-bubble);
             color: #f8f9fa;
         }
-        
+
         .avatar {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             margin: 0 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             flex-shrink: 0;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s ease;
+            transition: var(--transition);
         }
-        
+
         .avatar:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
-        
+
         .user-avatar {
             background: var(--user-bubble);
             color: white;
         }
-        
+
         .bot-avatar {
             background: var(--ai-gradient);
             color: white;
-            animation: ai-spin 3s linear infinite;
         }
-        
-        @keyframes ai-spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        
+
         .typing-indicator {
             display: none;
-            padding: 16px 20px;
+            padding: 15px 20px;
             background: var(--bot-bubble);
-            border-radius: 30px 30px 30px 10px;
+            border-radius: 25px 25px 25px 5px;
             max-width: 80%;
-            margin: 0 60px 20px 0;
+            margin: 0 60px 25px 0;
             align-self: flex-start;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
         }
-        
+
         [data-theme="dark"] .typing-indicator {
-            background: #343a40;
+            background: var(--bot-bubble);
         }
-        
+
         .typing-dots {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
-        
+
         .typing-dots span {
-            height: 12px;
-            width: 12px;
-            background: #999;
+            height: 10px;
+            width: 10px;
+            background: #6c757d;
             border-radius: 50%;
-            animation: typing 1.4s infinite ease-in-out;
+            animation: typing 1.2s infinite ease-in-out;
         }
-        
+
         [data-theme="dark"] .typing-dots span {
             background: #adb5bd;
         }
-        
+
         .typing-dots span:nth-child(2) {
             animation-delay: 0.2s;
         }
-        
+
         .typing-dots span:nth-child(3) {
             animation-delay: 0.4s;
         }
-        
+
         @keyframes typing {
-            0%,
-            60%,
-            100% {
-                transform: translateY(0);
-            }
-            30% {
-                transform: translateY(-15px);
-            }
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
         }
-        
+
         .input-area {
-            padding: 25px;
-            background: white;
-            border-top: 1px solid #dee2e6;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-top: 1px solid rgba(222, 226, 230, 0.5);
             display: flex;
             align-items: center;
             gap: 15px;
             box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.05);
             position: relative;
+            transition: var(--transition);
         }
-        
+
         [data-theme="dark"] .input-area {
-            background: var(--dark-bg);
-            border-top-color: #495057;
+            background: rgba(26, 26, 26, 0.95);
+            border-top-color: rgba(73, 80, 87, 0.5);
         }
-        
+
         .input-area input {
             flex: 1;
-            padding: 16px 25px;
-            border: 2px solid #ddd;
-            border-radius: 35px;
+            padding: 15px 25px;
+            border: 2px solid rgba(222, 226, 230, 0.8);
+            border-radius: var(--border-radius);
             outline: none;
             font-size: 1rem;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             background: white;
             box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
         }
-        
+
         [data-theme="dark"] .input-area input {
             background: #495057;
             border-color: #6c757d;
             color: #f8f9fa;
         }
-        
+
         .input-area input:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25), inset 0 2px 5px rgba(0, 0, 0, 0.05);
-            transform: translateY(-2px);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.25rem rgba(255, 215, 0, 0.25), inset 0 2px 5px rgba(0, 0, 0, 0.05);
+            transform: translateY(-1px);
         }
-        
-        .input-area button {
-            padding: 0;
-            background: var(--ai-gradient);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 55px;
-            height: 55px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
-        }
-        
-        .input-area button:hover {
-            transform: scale(1.15) rotate(360deg);
-            box-shadow: 0 8px 25px rgba(111, 66, 193, 0.5);
-        }
-        
-        .input-area button:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
+
         .voice-input-btn {
             background: var(--ai-gradient);
             color: white;
@@ -473,92 +373,90 @@
             width: 55px;
             height: 55px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
-            margin-left: auto;
         }
-        
+
         .voice-input-btn:hover {
             transform: scale(1.1);
             box-shadow: 0 6px 20px rgba(111, 66, 193, 0.4);
         }
-        
+
         .voice-input-btn.listening {
-            background: #ff6b6b;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
             animation: pulse 0.6s infinite;
         }
-        
-        .hidden {
-            display: none;
+
+        .input-area button {
+            background: var(--ai-gradient);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 55px;
+            height: 55px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
         }
-        /* Scrollbar */
-        
+
+        .input-area button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(111, 66, 193, 0.4);
+        }
+
+        .input-area button:disabled {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            cursor: not-allowed;
+        }
+
         .messages::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
         }
-        
+
         .messages::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 15px;
+            background: transparent;
         }
-        
+
         .messages::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #c1c1c1, #adb5bd);
-            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
         }
-        
-        [data-theme="dark"] .messages::-webkit-scrollbar-track {
-            background: #343a40;
-        }
-        
+
         [data-theme="dark"] .messages::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #6c757d, #495057);
+            background: rgba(255, 255, 255, 0.2);
         }
-        /* Mobile Optimizations */
-        
+
         @media (max-width: 768px) {
-            body {
-                padding: 5px;
-            }
             .chat-container {
                 height: 100vh;
-                border-radius: 20px;
-                max-width: 100%;
-                margin: 0;
+                border-radius: 0;
+                padding: 0;
             }
             .chat-header {
                 padding: 20px 15px;
             }
             .chat-header h1 {
-                font-size: 1.6rem;
+                font-size: 1.8rem;
                 gap: 10px;
             }
             .chat-header img.logo {
                 height: 40px;
             }
-            .controls,
-            .lang-switcher {
-                position: static;
-                justify-content: center;
-                margin-top: 15px;
-                gap: 8px;
-            }
             .controls {
-                gap: 6px;
-                flex-wrap: wrap;
+                gap: 10px;
             }
             .control-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
-            }
-            .lang-btn {
-                padding: 8px 12px;
-                font-size: 11px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
             }
             .messages {
                 padding: 20px 15px;
@@ -568,81 +466,64 @@
                 padding: 14px 18px;
             }
             .avatar {
-                width: 35px;
-                height: 35px;
-                font-size: 1.2rem;
+                width: 40px;
+                height: 40px;
+                font-size: 1.3rem;
                 margin: 0 10px;
             }
             .input-area {
-                padding: 20px 15px;
-                gap: 12px;
+                padding: 15px;
+                gap: 10px;
             }
             .input-area input {
                 padding: 14px 20px;
-                font-size: 16px;
             }
-            .input-area button,
-            .voice-input-btn {
+            .voice-input-btn, .input-area button {
                 width: 50px;
                 height: 50px;
-                font-size: 1.2rem;
+                font-size: 1.3rem;
             }
             .typing-indicator {
-                margin: 0 50px 18px 0;
+                margin: 0 50px 20px 0;
                 padding: 14px 18px;
             }
         }
-        
+
         @media (max-width: 480px) {
             .chat-header h1 {
-                font-size: 1.4rem;
-            }
-            .lang-switcher {
-                display: none;
-            }
-            .controls {
-                justify-content: space-around;
-                width: 100%;
+                font-size: 1.5rem;
             }
             .chat-header p {
                 font-size: 0.9rem;
             }
+            .controls {
+                position: static;
+                justify-content: center;
+                margin-top: 10px;
+            }
         }
-        /* Loading animation for messages */
-        
-        .message.loading {
+
+        .message.loading .bubble {
             animation: loadingPulse 1.5s infinite;
         }
-        
+
         @keyframes loadingPulse {
-            0%,
-            100% {
-                opacity: 0.7;
-            }
-            50% {
-                opacity: 1;
-            }
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
         }
     </style>
 </head>
-
 <body data-theme="light">
     <div class="chat-container">
         <div class="chat-header">
-            <div class="lang-switcher">
-                <button class="lang-btn active" data-lang="uz"><i class="fas fa-globe"></i> UZB</button>
-                <button class="lang-btn" data-lang="ru"><i class="fas fa-globe"></i> RUS</button>
-                <button class="lang-btn" data-lang="en"><i class="fas fa-globe"></i> ENG</button>
-            </div>
-            <h1 id="chat-title"><img src="asserts/railsafe.png" alt="RailSafe Logo" class="logo"> RailSafe AI</h1>
-            <p id="chat-subtitle">Aqlli temir yo'l yordamchisi — faqat RailSafe mavzulariga javob beraman!</p>
+            <h1 id="chat-title"><img src="railsafe.png" alt="RailSafe Logo" class="logo"> RailSafe AI</h1>
+            <p id="chat-subtitle">Aqlli temir yo'l yordamchisi — temir yo'l xavfsizligi va diagnostikasi bo'yicha mutaxassis!</p>
             <div class="controls">
                 <button class="control-btn forecast-btn" id="forecastBtn" onclick="getForecast()" title="Ob-havo bashorati"><i class="fas fa-cloud-sun"></i></button>
                 <button class="control-btn clear-btn" onclick="clearChat()" title="Chatni tozalash"><i class="fas fa-trash"></i></button>
                 <button class="control-btn theme-toggle" onclick="toggleTheme()" title="Tema o'zgartirish"><i class="fas fa-moon"></i></button>
             </div>
         </div>
-
         <div class="messages" id="messages"></div>
         <div class="typing-indicator" id="typingIndicator">
             <div class="typing-dots">
@@ -650,316 +531,303 @@
             </div>
             <span id="typing-text" style="margin-left: 15px;">Yozmoqdaman...</span>
         </div>
-
         <div class="input-area">
-            <input type="text" id="userInput" placeholder="Savolingizni yozing (faqat RailSafe haqida)..." onkeypress="if(event.key==='Enter') sendMessage()">
-            <button class="voice-input-btn" id="voiceBtn" title="AI Ovozli Yordamchi"><i class="fas fa-brain"></i></button>
+            <input type="text" id="userInput" placeholder="Savolingizni yozing (RailSafe haqida)..." onkeypress="if(event.key==='Enter') sendMessage()">
+            <button class="voice-input-btn" id="voiceBtn" title="Ovoz bilan gapirish"><i class="fas fa-microphone"></i></button>
             <button onclick="sendMessage()" id="sendBtn"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
-        // Tarjimalar obyekti (kengaytirildi: ko'proq javoblar, kontekstli logika va AI xususiyatlari)
         const translations = {
             uz: {
                 title: "<img src='railsafe.png' alt='Logo' class='logo'> RailSafe AI",
-                subtitle: "Aqlli temir yo'l yordamchisi — faqat RailSafe mavzulariga javob beraman! <i class='fas fa-shield-alt'></i>",
-                placeholder: "Savolingizni yozing (faqat RailSafe haqida)...",
+                subtitle: "Aqlli temir yo'l yordamchisi — temir yo'l xavfsizligi va diagnostikasi bo'yicha mutaxassis! <i class='fas fa-shield-alt'></i>",
+                placeholder: "Savolingizni yozing (RailSafe haqida)...",
                 typing: "AI yozmoqdaman...",
-                initial: "Salom! Men RailSafe AI man. Temir yo'l xavfsizligi va diagnostikasi bo'yicha yordam beraman. Ovozli yordamchi uchun <i class='fas fa-brain'></i> tugmasini bosing. Savolingiz nima? 🚄",
+                initial: "Salom! Men RailSafe AI man. Temir yo'l xavfsizligi, diagnostikasi, stansiyalar holati va bashoratlari bo'yicha yordam beraman. Ovoz bilan gapirish uchun mikrofon tugmasini bosing. Savolingiz nima? 🚄",
                 responses: {
-                    salom: ["Salom! RailSafe tizimiga xush kelibsiz 🚄. Temir yo'l xavfsizligi va diagnostikasi haqida savollaringiz bormi? <i class='fas fa-question-circle'></i>"],
-                    assalomu_alaykum: ["Va alaykum assalom! RailSafe AI sizning temir yo'l yordamchingiz. Nima yordam bera olaman? <i class='fas fa-handshake'></i>"],
-                    xayr: ["Xayr! Xavfsiz sayohatlar tilaymiz. Yana kerak bo'lsa, qaytib keling! <i class='fas fa-wave-hand'></i>"],
-                    stansiya: ["O'zbekistonning qaysi stansiyasi haqida ma'lumot olishni xohlaysiz? Masalan: Toshkent, Samarqand yoki Buxoro. <i class='fas fa-map-marker-alt'></i>"],
-                    toshkent: ["Toshkent stansiyasi — O'zbekiston poytaxtining markaziy temir yo'l uzeli. RailSafe tizimi orqali real vaqtda monitoring qilinadi. Bugungi holat: normal 🚉. Harorat: 25°C. <i class='fas fa-thermometer-quarter'></i>"],
-                    samarqand: ["Samarqand stansiyasi — Registon maydoniga yaqin joylashgan tarixiy uzel. RailSafe diagnostikasi orqali poyezdlar o'tishi kuzatiladi. Harorat: 24°C. <i class='fas fa-sun'></i>"],
-                    buxoro: ["Buxoro stansiyasi — Ipak yo'li bo'ylab muhim nuqta. RailSafe tizimi balans va aloqa holatini kuzatadi. Oxirgi tekshiruv: stabil. <i class='fas fa-balance-scale'></i>"],
-                    poyezd: ["Poyezdlar haqida: Toshkent-Samarqand yo'nalishi har kuni 10 ta poyezd o'tadi. Jadval uchun aniq vaqtni ayting. <i class='fas fa-train'></i>"],
-                    jadval: ["Bugungi jadval (10.10.2025): Toshkentdan Samarqandga 08:00, 12:00, 18:00 da ketadi. RailSafe orqali kechikishlarni kuzatamiz. <i class='fas fa-clock'></i>"],
-                    o_tgan_poyezdlar: ["Bugun chap tomonda 12 ta, o'ng tomonda 15 ta poyezd o'tgan. RailSafe loglariga ko'ra, hammasi normal. <i class='fas fa-chart-line'></i>"],
-                    diagnostika: ["RailSafe diagnostikasi: Chap tamon — normal (42°C), O'ng tamon — ogohlantirish (65°C). Umumiy holat: stabil. <i class='fas fa-tools'></i>"],
-                    holat: ["Tizim holati: Oxirgi tekshiruv 10.10.2025, 14:30. Ish vaqti: 48 soat. Hech qanday alarm yo'q. <i class='fas fa-check-circle'></i>"],
-                    xavfsizlik: ["RailSafe xavfsizligi: Sensorlar harorat, balans va aloqani kuzatadi. Har qanday o'zgarishda ogohlantirish beriladi. <i class='fas fa-shield-alt'></i>"],
-                    sensor: ["Sensorlar yangilandi. Temp oshishi aniqlandi — 06:45 da, lekin normal darajaga qaytdi. <i class='fas fa-thermometer-half'></i>"],
-                    log: ["Oxirgi voqealar: Aloqa tiklandi (08:24), sensor yangilandi (07:30). To'liq log uchun stansiya nomini ayting. <i class='fas fa-file-alt'></i>"],
-                    voqea: ["Voqealar: Balans buzilishi (07:15, o'ng tomonda), qurilma qayta yuklandi (06:30). Hammasi hal qilindi. <i class='fas fa-exclamation-triangle'></i>"],
-                    yordam: ["Men faqat RailSafe mavzulariga javob beraman: stansiyalar, poyezdlar, diagnostika, xavfsizlik, ob-havo bashorati. Boshqa savol bo'lsa, uzr, yordam bera olmayman. <i class='fas fa-info-circle'></i>"],
-                    nima_qila_olasiz: ["Men RailSafe tizimi haqida: stansiya holati, poyezd jadvali, diagnostika loglari, xavfsizlik maslahatlarini beraman. Ovozli javob va ob-havo bashorati ham bor! <i class='fas fa-rocket'></i>"],
-                    ob_havo: ["Bugungi ob-havo bashorati (Toshkent): Quyoshli, 25-28°C. Poyezdlar uchun ideal sharoit. Batafsil stansiya nomini ayting. <i class='fas fa-cloud-sun'></i>"],
-                    bashorat: ["Bashorat: Ertaga Samarqandda yomg'irli, 18-22°C. RailSafe sensorlari namlikni kuzatadi. Xavfsizlik maslahati: Silliqlarda ehtiyot bo'ling. <i class='fas fa-umbrella'></i>"],
-                    kechikish: ["Poyezd kechikish bashorati: Bugun 5% ehtimol, shamol sababli. RailSafe real vaqtda yangilaydi. <i class='fas fa-clock'></i>"],
-                    default: ["Kechirasiz, bu savol RailSafe bilan bog'liq emas. Faqat temir yo'l diagnostikasi, xavfsizligi va bashoratlari haqida so'rang. <i class='fas fa-sad-tear'></i>"]
+                    salom: ["Salom! RailSafe tizimiga xush kelibsiz. Temir yo'l xavfsizligi va diagnostikasi haqida savollaringizni kutaman. <i class='fas fa-question-circle'></i>"],
+                    assalomu_alaykum: ["Va alaykum assalom! RailSafe AI sizga temir yo'l masalalarida yordam beradi. Nima bilmoqchisiz? <i class='fas fa-handshake'></i>"],
+                    xayr: ["Xayr! Temir yo'l xavfsizligiga e'tiborli bo'ling. Yana savollaringiz bo'lsa, qaytib keling! <i class='fas fa-wave-hand'></i>"],
+                    stansiya: ["Qaysi stansiya haqida ma'lumot kerak? Masalan: Toshkent, Samarqand yoki Buxoro. <i class='fas fa-map-marker-alt'></i>"],
+                    toshkent: ["Toshkent stansiyasi: Markaziy temir yo'l uzeli. Real vaqt monitoring: normal. Harorat: 25°C. Poyezdlar soni: 25 ta. <i class='fas fa-thermometer-quarter'></i>"],
+                    samarqand: ["Samarqand stansiyasi: Tarixiy uzel. Diagnostika: stabil. Harorat: 24°C. O'tgan poyezdlar: 18 ta. <i class='fas fa-sun'></i>"],
+                    buxoro: ["Buxoro stansiyasi: Ipak yo'li nuqtasi. Holat: normal. Harorat: 26°C. Log: stabil. <i class='fas fa-balance-scale'></i>"],
+                    poyezd: ["Poyezd haqida: Toshkent-Samarqand yo'nalishida kuniga 10 ta poyezd. Jadval yoki holatni aniqlashtiring. <i class='fas fa-train'></i>"],
+                    jadval: ["Bugungi jadval: Toshkentdan Samarqandga 08:00, 12:00, 18:00. Kechikish: yo'q. <i class='fas fa-clock'></i>"],
+                    o_tgan_poyezdlar: ["Bugun chap tomonda 12 ta, o'ng tomonda 15 ta poyezd o'tdi. Umumiy: 27 ta. <i class='fas fa-chart-line'></i>"],
+                    diagnostika: ["Diagnostika: Chap tizim normal (42°C), o'ng tizim ogohlantirish (65°C). Umumiy holat: stabil. <i class='fas fa-tools'></i>"],
+                    holat: ["Tizim holati: Oxirgi tekshiruv 14:30. Ish vaqti: 48 soat. Alarm: yo'q. <i class='fas fa-check-circle'></i>"],
+                    xavfsizlik: ["Xavfsizlik: Sensorlar harorat va balansni kuzatadi. Har qanday muammo ogohlantiriladi. <i class='fas fa-shield-alt'></i>"],
+                    sensor: ["Sensorlar yangilandi. Harorat oshishi aniqlandi, lekin normalga qaytdi. <i class='fas fa-thermometer-half'></i>"],
+                    log: ["Oxirgi loglar: Aloqa tiklandi, sensor yangilandi. To'liq log uchun stansiya ayting. <i class='fas fa-file-alt'></i>"],
+                    voqea: ["Voqealar: Balans buzilishi hal qilindi. Hammasi normal. <i class='fas fa-exclamation-triangle'></i>"],
+                    yordam: ["Men RailSafe haqida yordam beraman: stansiyalar, poyezdlar, diagnostika, ob-havo. Boshqa savollar uchun uzr. <i class='fas fa-info-circle'></i>"],
+                    nima_qila_olasiz: ["RailSafe tizimi haqida ma'lumot beraman, hisobotlar tayyorlayman, ob-havo bashorati qilaman. Ovozli javob beraman! <i class='fas fa-rocket'></i>"],
+                    ob_havo: ["Ob-havo: Quyoshli, 25-28°C. Poyezdlar uchun ideal. Stansiya ayting batafsil uchun. <i class='fas fa-cloud-sun'></i>"],
+                    bashorat: ["Ertaga yomg'irli, 18-22°C. Sensorlar namlikni kuzatadi. Ehtiyot bo'ling! <i class='fas fa-umbrella'></i>"],
+                    kechikish: ["Kechikish ehtimoli: 5%. Real vaqt monitoring. <i class='fas fa-clock'></i>"],
+                    hisobot: ["Hisobot tayyorlanmoqda... PDF yuklab oling. <i class='fas fa-file-pdf'></i>"],
+                    default: ["Bu savolga javobim yo'q. Internetdan qidirib ko'ray... Natija: Topilmadi. RailSafe mavzusida so'rang. <i class='fas fa-search'></i>"]
                 },
                 lang: 'uz-UZ'
-            },
-            // Ru va En uchun ham shunga o'xshash, lekin qisqartirib qo'ydim (oldingi kabi)
-            ru: {
-                // ... (oldingi kabi, lekin yangi ikonalar qo'shildi)
-                lang: 'ru-RU'
-            },
-            en: {
-                // ... (oldingi kabi)
-                lang: 'en-US'
             }
         };
-
-        let currentLang = localStorage.getItem('chatLanguage') || 'uz';
+        let currentLang = 'uz';
         let chatContext = {
             lastTopic: null,
-            trainCount: {
-                left: 12,
-                right: 15
-            },
+            currentStation: null,
+            trainCount: { left: 12, right: 15 },
             weatherData: {
-                toshkent: {
-                    today: 'Quyoshli, 25-28°C',
-                    tomorrow: 'Bulutli, 20-24°C'
-                },
-                samarqand: {
-                    today: 'Ochiq, 24-27°C',
-                    tomorrow: 'Yomg\'irli, 18-22°C'
-                },
-                buxoro: {
-                    today: 'Issiq, 26-30°C',
-                    tomorrow: 'Shamolli, 22-26°C'
-                }
+                toshkent: { today: 'Quyoshli, 25-28°C', tomorrow: 'Bulutli, 20-24°C' },
+                samarqand: { today: 'Ochiq, 24-27°C', tomorrow: 'Yomg\'irli, 18-22°C' },
+                buxoro: { today: 'Issiq, 26-30°C', tomorrow: 'Shamolli, 22-26°C' }
             },
-            conversationHistory: [] // Yangi: Suhbat tarixi uchun logika
+            conversationHistory: []
         };
-
+        const stations = [
+            { id: "blok-post-kattakurgan", name: "Блок-Пост-Каттакурган", coords: [39.9024, 66.2457], description: "Kattakurgan blok-posti, Samarqand viloyati" },
+            { id: "kattakurgan-rzd28", name: "Каттакурган-Рзд№28", coords: [39.8800, 66.2800], description: "Raz'ezd N28 Kattakurgan yaqinida, Samarqand viloyati" },
+            { id: "nurbulak-blok-post", name: "Нурбулак-Блок-пост", coords: [39.8500, 66.4068], description: "Nurbulak blok-posti, Nurobod tumani" },
+            { id: "rzd24-nurbulak", name: "Рзд№24-Нурбулак", coords: [39.7000, 66.8000], description: "Raz'ezd N24 Nurbuloq yaqinida, Pastdarg'om tumani" },
+            { id: "yangiyul-paxta", name: "Янгийўл-Пахта", coords: [41.0139, 68.9449], description: "Paxta stansiyasi (Yangiyo'l-Paxta bo'limi), Toshkent viloyati" },
+            { id: "paxta-almazor", name: "Пахта-Алмазар", coords: [40.9621, 68.8583], description: "Almazor stansiyasi (Paxta-Almazor bo'limi), Toshkent viloyati" },
+            { id: "tashkent", name: "Ташкент", coords: [41.3111, 69.2406], description: "Toshkent temir yo'l stansiyasi, Toshkent shahri" },
+            { id: "samarkand", name: "Самарканд", coords: [39.6825, 66.9286], description: "Samarqand temir yo'l stansiyasi, Samarqand viloyati" },
+            { id: "bukhara", name: "Бухара", coords: [39.7164, 64.5511], description: "Buxoro temir yo'l stansiyasi, Buxoro viloyati" },
+            { id: "navoi", name: "Навои", coords: [40.1, 65.3667], description: "Navoiy temir yo'l stansiyasi, Navoiy viloyati" },
+            { id: "jizzak", name: "Джизак", coords: [40.133, 67.833], description: "Jizzax temir yo'l stansiyasi, Jizzax viloyati" },
+            { id: "gulistan", name: "Гулистан", coords: [40.4915, 68.7811], description: "Guliston temir yo'l stansiyasi, Sirdaryo viloyati" },
+            { id: "kungrad", name: "Кунград", coords: [43.0425, 58.8503], description: "Kungrad temir yo'l stansiyasi, Qoraqalpog'iston Respublikasi" },
+            { id: "urgench", name: "Ургенч", coords: [41.55, 60.6333], description: "Urganch temir yo'l stansiyasi, Xorazm viloyati" },
+            { id: "andijan", name: "Андижан", coords: [40.7821, 72.3442], description: "Andijon temir yo'l stansiyasi, Andijon viloyati" },
+            { id: "fergana", name: "Фергана", coords: [40.3844, 71.7864], description: "Farg'ona temir yo'l stansiyasi, Farg'ona viloyati" },
+            { id: "termez", name: "Термез", coords: [37.2611, 67.3086], description: "Termiz temir yo'l stansiyasi, Surxondaryo viloyati" },
+            { id: "karshi", name: "Карши", coords: [38.8667, 65.8], description: "Qarshi temir yo'l stansiyasi, Qashqadaryo viloyati" },
+            { id: "nukus", name: "Нукус", coords: [42.4531, 59.6103], description: "Nukus temir yo'l stansiyasi, Qoraqalpog'iston Respublikasi" },
+            { id: "xiva", name: "Хива", coords: [41.3833, 60.35], description: "Xiva temir yo'l stansiyasi, Xorazm viloyati" }
+        ];
         let recognition;
         let isListening = false;
-
         function initRecognition() {
             if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
                 recognition = new SpeechRecognition();
-                recognition.lang = translations[currentLang].lang;
+                recognition.lang = translations.uz.lang;
                 recognition.continuous = false;
                 recognition.interimResults = true;
+                recognition.maxAlternatives = 1;
                 recognition.onstart = () => {
                     isListening = true;
-                    document.getElementById('voiceBtn').innerHTML = '<i class="fas fa-stop-circle"></i>';
                     document.getElementById('voiceBtn').classList.add('listening');
+                    document.getElementById('voiceBtn').innerHTML = '<i class="fas fa-stop-circle"></i>';
                 };
-                recognition.onresult = function(event) {
-                    let transcript = '';
-                    for (let i = event.resultIndex; i < event.results.length; i++) {
-                        transcript += event.results[i][0].transcript;
-                    }
-                    transcript = transcript.toLowerCase().trim();
+                recognition.onresult = (event) => {
+                    let transcript = event.results[0][0].transcript.trim().toLowerCase();
                     document.getElementById('userInput').value = transcript;
-                    chatContext.conversationHistory.push({
-                        user: transcript,
-                        time: new Date().toLocaleTimeString()
-                    });
+                    chatContext.conversationHistory.push({ user: transcript, time: new Date().toLocaleTimeString() });
                     sendMessage();
                 };
                 recognition.onend = () => {
                     isListening = false;
-                    document.getElementById('voiceBtn').innerHTML = '<i class="fas fa-brain"></i>';
                     document.getElementById('voiceBtn').classList.remove('listening');
+                    document.getElementById('voiceBtn').innerHTML = '<i class="fas fa-microphone"></i>';
                 };
-                recognition.onerror = function(event) {
-                    console.error('Ovozli xato:', event.error);
+                recognition.onerror = (event) => {
+                    console.error('Ovoz xatosi:', event.error);
                     if (event.error !== 'aborted') {
-                        addMessage(translations[currentLang].responses.default[0], 'bot');
-                        speak(translations[currentLang].responses.default[0]);
+                        addMessage("Ovoz aniqlashda xato yuz berdi. Iltimos, qayta urinib ko'ring.", 'bot');
+                        speak("Ovoz aniqlashda xato yuz berdi. Iltimos, qayta urinib ko'ring.");
                     }
-                    isListening = false;
-                    document.getElementById('voiceBtn').innerHTML = '<i class="fas fa-brain"></i>';
-                    document.getElementById('voiceBtn').classList.remove('listening');
                 };
             } else {
                 document.getElementById('voiceBtn').style.display = 'none';
+                addMessage("Ovozli kirish brauzeringizda qo'llab-quvvatlanmaydi.", 'bot');
             }
         }
-
-        function setLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('chatLanguage', lang);
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-            });
-            document.documentElement.lang = lang;
-            document.getElementById('chat-title').innerHTML = translations[lang].title;
-            document.getElementById('chat-subtitle').innerHTML = translations[lang].subtitle;
-            document.getElementById('userInput').placeholder = translations[lang].placeholder;
-            document.getElementById('typing-text').textContent = translations[lang].typing;
+        function setLanguage() {
+            document.documentElement.lang = 'uz';
+            document.getElementById('chat-title').innerHTML = translations.uz.title;
+            document.getElementById('chat-subtitle').innerHTML = translations.uz.subtitle;
+            document.getElementById('userInput').placeholder = translations.uz.placeholder;
+            document.getElementById('typing-text').textContent = translations.uz.typing;
             initRecognition();
-            if (recognition) {
-                recognition.lang = translations[lang].lang;
-            }
             clearChat(true);
             addInitialMessage();
         }
-
         function addMessage(text, sender, delay = 0) {
             setTimeout(() => {
                 const messagesDiv = document.getElementById('messages');
                 const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${sender}-message show loading`;
+                messageDiv.className = `message ${sender}-message`;
                 messageDiv.innerHTML = `
                     <div class="avatar ${sender}-avatar">${sender === 'user' ? '<i class="fas fa-user"></i>' : '<i class="fas fa-robot"></i>'}</div>
                     <div class="bubble">${text}</div>
                 `;
                 messagesDiv.appendChild(messageDiv);
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                setTimeout(() => messageDiv.classList.remove('loading'), 1500);
             }, delay);
         }
-
         function addInitialMessage() {
-            addMessage(translations[currentLang].initial, 'bot');
-            speak(translations[currentLang].initial);
+            addMessage(translations.uz.initial, 'bot');
+            speak(translations.uz.initial);
         }
-
         function showTyping(show) {
-            document.getElementById('typingIndicator').style.display = show ? 'block' : 'none';
+            document.getElementById('typingIndicator').style.display = show ? 'flex' : 'none';
         }
-
         function speak(text) {
             if ('speechSynthesis' in window) {
                 speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = translations[currentLang].lang;
-                utterance.rate = 0.95;
-                utterance.pitch = 1.05;
+                utterance.lang = 'uz-UZ';
+                utterance.rate = 1.0;
+                utterance.pitch = 1.0;
                 utterance.volume = 1.0;
                 utterance.onend = () => console.log('Ovoz tugadi');
                 speechSynthesis.speak(utterance);
             }
         }
-
         function getResponse(input) {
             input = input.toLowerCase().trim();
-
-            const keywords = currentLang === 'uz' ? ['rail', 'safe', 'temir', 'yo\'l', 'stansiya', 'poyezd', 'diagnostika', 'holat', 'sensor', 'log', 'xavfsizlik', 'ob', 'havo', 'bashorat', 'kechikish', 'jadval', 'voqea'] :
-                currentLang === 'ru' ? ['rail', 'safe', 'железн', 'дорога', 'станци', 'поезд', 'диагностик', 'состояни', 'датчик', 'лог', 'безопасн', 'погода', 'прогноз', 'задержк', 'расписани', 'событи'] : ['rail', 'safe', 'railway', 'station', 'train', 'diagnostics', 'status', 'sensor', 'log', 'safety', 'weather', 'forecast', 'delay', 'schedule', 'event'];
-
-            if (!keywords.some(keyword => input.includes(keyword))) {
-                return translations[currentLang].responses.default[0];
+            const keywords = ['rail', 'safe', 'temir', 'yo\'l', 'stansiya', 'poyezd', 'diagnostika', 'holat', 'sensor', 'log', 'xavfsizlik', 'ob', 'havo', 'bashorat', 'kechikish', 'jadval', 'voqea', 'hisobot'];
+            if (!keywords.some(k => input.includes(k))) {
+                return translations.uz.responses.default;
             }
-
-            const keys = Object.keys(translations[currentLang].responses);
+            const keys = Object.keys(translations.uz.responses);
             for (let key of keys) {
                 if (input.includes(key)) {
-                    let replies = translations[currentLang].responses[key];
-                    let reply = replies[Math.floor(Math.random() * replies.length)];
-                    // Kengaytirilgan kontekst logikasi
-                    if (key === 'poyezd' && chatContext.lastTopic === 'o\'tgan') {
-                        reply += ` Bugun ${chatContext.trainCount.left + Math.floor(Math.random() * 3) + 1} ta qo'shimcha poyezd o'tdi (AI bashorati).`;
-                        chatContext.trainCount.left += Math.floor(Math.random() * 3) + 1;
+                    let reply = translations.uz.responses[key];
+                    if (input.includes('stansiya')) {
+                        const stationNames = stations.map(s => s.name.toLowerCase());
+                        const foundStation = stationNames.find(name => input.includes(name));
+                        if (foundStation) {
+                            const station = stations.find(s => s.name.toLowerCase() === foundStation);
+                            chatContext.currentStation = station;
+                            reply += ` ${station.name} stansiyasi: ${station.description}. Koordinatalar: ${station.coords.join(', ')}.`;
+                        }
+                    }
+                    if (key === 'hisobot' && chatContext.currentStation) {
+                        reply += ` ${chatContext.currentStation.name} stansiyasi uchun hisobot tayyorlanmoqda...`;
+                        generatePDF(chatContext.currentStation);
+                    } else if (key === 'hisobot') {
+                        reply += ' Hisobot uchun stansiya nomini ayting.';
                     }
                     if (key === 'ob_havo' || key === 'bashorat') {
                         const station = input.includes('toshkent') ? 'toshkent' : input.includes('samarqand') ? 'samarqand' : 'buxoro';
                         const data = chatContext.weatherData[station];
-                        reply += ` ${station.toUpperCase()} uchun: Bugun ${data.today}, ertaga ${data.tomorrow}. AI maslahati: Harorat o'zgarishini kuzating.`;
+                        reply += ` ${station.charAt(0).toUpperCase() + station.slice(1)} uchun: Bugun ${data.today}, ertaga ${data.tomorrow}. AI maslahati: Harorat o'zgarishiga e'tibor bering.`;
                     }
-                    if (key === 'kechikish' && chatContext.conversationHistory.length > 1) {
-                        reply += ` Oldingi suhbatga ko'ra, kechikish ehtimoli ${Math.floor(Math.random() * 10) + 1}% ga oshdi.`;
+                    if (chatContext.conversationHistory.length > 1) {
+                        reply += ` Oldingi suhbatga ko'ra, qo'shimcha ma'lumot: ${Math.floor(Math.random() * 10) + 1} ta yangi o'zgarish.`;
                     }
                     chatContext.lastTopic = key;
-                    chatContext.conversationHistory.push({
-                        bot: reply,
-                        time: new Date().toLocaleTimeString()
-                    });
+                    chatContext.conversationHistory.push({ bot: reply, time: new Date().toLocaleTimeString() });
                     return reply;
                 }
             }
-
-            return translations[currentLang].responses.yordam[0];
+            return translations.uz.responses.yordam;
         }
-
+        async function generatePDF(station) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(18);
+            doc.text("RailSafe Hisoboti", 105, 20, { align: 'center' });
+            doc.setFontSize(14);
+            doc.text(`Stansiya: ${station.name}`, 20, 40);
+            doc.text(`Tavsif: ${station.description}`, 20, 50);
+            doc.text(`Koordinatalar: ${station.coords.join(', ')}`, 20, 60);
+            doc.setFontSize(12);
+            doc.text("Diagnostika Holati:", 20, 80);
+            doc.text("Chap tizim: Normal (42°C)", 30, 90);
+            doc.text("O'ng tizim: Ogohlantirish (65°C)", 30, 100);
+            doc.text("O'tgan Poyezdlar: 27 ta", 20, 110);
+            doc.text("Ob-havo: Quyoshli, 25-28°C", 20, 120);
+            // Grafik qo'shish uchun canvas yaratish
+            const canvas = document.createElement('canvas');
+            canvas.width = 400;
+            canvas.height = 200;
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['06:00', '09:00', '12:00', '15:00', '18:00'],
+                    datasets: [{
+                        label: 'Harorat (°C)',
+                        data: [30, 42, 50, 65, 55],
+                        borderColor: '#003366',
+                        fill: false
+                    }]
+                },
+                options: { responsive: false }
+            });
+            const imgData = canvas.toDataURL('image/png');
+            doc.addImage(imgData, 'PNG', 20, 130, 170, 60);
+            doc.save(`${station.name}_hisobot.pdf`);
+        }
         function getForecast() {
-            const stations = ['Toshkent', 'Samarqand', 'Buxoro'];
-            const randomStation = stations[Math.floor(Math.random() * stations.length)];
-            const reply = `AI bashorati: ${randomStation} da ertaga yomg'irli, 18-22°C. RailSafe sensorlari namlikni kuzatadi. Xavfsizlik maslahati: Silliqlarda ehtiyot bo'ling. <i class='fas fa-umbrella'></i>`;
+            const stationsList = ['Toshkent', 'Samarqand', 'Buxoro'];
+            const randomStation = stationsList[Math.floor(Math.random() * stationsList.length)];
+            const reply = `AI bashorati: ${randomStation} da ertaga yomg'irli, 18-22°C. Sensorlar namlikni kuzatadi. Ehtiyot bo'ling! <i class='fas fa-umbrella'></i>`;
             addMessage(reply, 'bot');
             speak(reply);
         }
-
         function toggleTheme() {
             const body = document.body;
-            const currentTheme = body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
+            const currentTheme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('theme', currentTheme);
             const icon = document.querySelector('.theme-toggle i');
-            if (newTheme === 'dark') {
-                icon.classList.replace('fa-moon', 'fa-sun');
-            } else {
-                icon.classList.replace('fa-sun', 'fa-moon');
-            }
+            icon.classList.toggle('fa-moon', currentTheme === 'light');
+            icon.classList.toggle('fa-sun', currentTheme === 'dark');
         }
-
         function sendMessage() {
             const input = document.getElementById('userInput').value.trim();
             if (!input) return;
-
             addMessage(input, 'user');
             document.getElementById('userInput').value = '';
             document.getElementById('sendBtn').disabled = true;
-
             showTyping(true);
-
             setTimeout(() => {
                 const reply = getResponse(input);
                 showTyping(false);
                 addMessage(reply, 'bot');
                 speak(reply);
                 document.getElementById('sendBtn').disabled = false;
-            }, 600 + Math.random() * 1200);
+            }, 800 + Math.random() * 1500);
         }
-
         function clearChat(silent = false) {
-            if (!silent && !confirm('Chat tarixini tozalashni xohlaysizmi?')) return;
+            if (!silent && !confirm('Chatni tozalamoqchimisiz?')) return;
             document.getElementById('messages').innerHTML = '';
             chatContext = {
                 lastTopic: null,
-                trainCount: {
-                    left: 12,
-                    right: 15
-                },
+                currentStation: null,
+                trainCount: { left: 12, right: 15 },
                 weatherData: chatContext.weatherData,
                 conversationHistory: []
             };
             if (!silent) addInitialMessage();
         }
-
         document.getElementById('voiceBtn').addEventListener('click', () => {
-            if (!recognition) {
-                alert('Brauzeringiz ovozli kirishni qo\'llab-quvvatlamaydi.');
-                return;
-            }
             if (isListening) {
                 recognition.stop();
             } else {
                 recognition.start();
             }
         });
-
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', () => setLanguage(btn.getAttribute('data-lang')));
-        });
-
         document.getElementById('userInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();
         });
-
-        // Tema yuklash
         window.onload = () => {
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.body.setAttribute('data-theme', savedTheme);
             if (savedTheme === 'dark') {
                 document.querySelector('.theme-toggle i').classList.replace('fa-moon', 'fa-sun');
             }
-            setLanguage(currentLang);
-            initRecognition();
+            setLanguage();
         };
     </script>
 </body>
-
 </html>
+```
