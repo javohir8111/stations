@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="uz">
 
@@ -5,29 +8,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RailSafe - Stansiyalar Holati</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
+         :root {
             --primary-color: #0a2540;
+            /* Deep blue for luxury */
             --secondary-color: #007bff;
+            /* Vibrant blue accent */
             --accent-color: #ffd700;
+            /* Gold for highlights, luxurious touch */
             --bg-color: #f8f9fa;
+            /* Light background for simplicity */
             --text-color: #212529;
+            /* Dark text */
             --header-bg: linear-gradient(135deg, #3390db, #059fd2);
+            /* Gradient for header luxury */
             --header-text: #ffffff;
             --card-bg: #ffffff;
             --border-color: #dee2e6;
-            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
-            --transition: all 0.3s ease-in-out;
+            --stats-primary: #007bff;
+            --input-bg: #ffffff;
             --status-normal: #28a745;
+            /* Green */
             --status-warning: #ffc107;
+            /* Yellow */
             --status-alarm: #dc3545;
+            /* Red */
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
+            /* Soft shadow for elegance */
+            --transition: all 0.3s ease-in-out;
         }
-
+        
         [data-theme="dark"] {
             --primary-color: #ffffff;
             --secondary-color: #60a5fa;
@@ -38,9 +54,13 @@
             --header-text: #e0e0e0;
             --card-bg: #2c2c2c;
             --border-color: #444;
-            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --stats-primary: #60a5fa;
+            --input-bg: #3a3a3a;
+            --status-normal: #4ade80;
+            --status-warning: #facc15;
+            --status-alarm: #f87171;
         }
-
+        
         body {
             margin: 0;
             font-family: 'Roboto', sans-serif;
@@ -49,31 +69,21 @@
             transition: var(--transition);
             overflow-x: hidden;
         }
-
-        /* ===== HEADER STYLES ===== */
+        
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 30px;
+            padding: 15px 20px;
             background: var(--header-bg);
             color: var(--header-text);
             box-shadow: var(--shadow-soft);
-            position: fixed;
+            position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
             z-index: 1000;
-            transition: var(--transition);
-            height: 80px;
+            flex-wrap: wrap;
         }
-
-        .header.scrolled {
-            height: 60px;
-            padding: 10px 20px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-        }
-
+        
         .logo-container {
             display: flex;
             align-items: center;
@@ -81,29 +91,29 @@
             cursor: pointer;
             transition: var(--transition);
         }
-
+        
         .logo-container:hover {
+            opacity: 0.9;
             transform: translateY(-2px);
         }
-
+        
         .logo {
             height: 50px;
             border-radius: 8px;
-            transition: var(--transition);
             box-shadow: var(--shadow-soft);
+            transition: var(--transition);
         }
-
+        
         .logo:hover {
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
-
+        
         .header-right {
             display: flex;
             align-items: center;
             gap: 20px;
         }
-
+        
         .profile-link {
             color: var(--header-text);
             font-size: 1.8rem;
@@ -120,12 +130,12 @@
             background: rgba(255, 255, 255, 0.1);
             text-decoration: none;
         }
-
+        
         .profile-link:hover {
             background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
-
+        
         .profile-link::after {
             content: '';
             position: absolute;
@@ -137,7 +147,7 @@
             border-radius: 50%;
             border: 2px solid var(--header-bg);
         }
-
+        
         .logout-btn {
             background: rgba(255, 255, 255, 0.15);
             border: none;
@@ -149,16 +159,13 @@
             border-radius: 30px;
             transition: var(--transition);
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
-
+        
         .logout-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
         }
-
+        
         .notification-bell {
             position: relative;
             font-size: 1.8rem;
@@ -168,23 +175,37 @@
             transition: var(--transition);
             animation: ring 2s linear infinite paused;
         }
-
+        
         .notification-bell:hover {
             background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
+            transform: scale(1.05);
             animation-play-state: running;
         }
-
+        
         @keyframes ring {
-            0% { transform: rotate(0deg); }
-            10% { transform: rotate(-25deg); }
-            20% { transform: rotate(25deg); }
-            30% { transform: rotate(-12.5deg); }
-            40% { transform: rotate(6.25deg); }
-            50% { transform: rotate(0deg); }
-            100% { transform: rotate(0deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            10% {
+                transform: rotate(-25deg);
+            }
+            20% {
+                transform: rotate(25deg);
+            }
+            30% {
+                transform: rotate(-12.5deg);
+            }
+            40% {
+                transform: rotate(6.25deg);
+            }
+            50% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
         }
-
+        
         .notification-badge {
             position: absolute;
             top: -5px;
@@ -202,62 +223,27 @@
             font-weight: bold;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-
+        
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-5px); }
-            60% { transform: translateY(-3px); }
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-5px);
+            }
+            60% {
+                transform: translateY(-3px);
+            }
         }
-
-        /* ===== DROPDOWN MENU ===== */
-        .dropdown-menu {
-            background: var(--card-bg);
-            border: none;
-            border-radius: 12px;
-            box-shadow: var(--shadow-soft);
-            padding: 10px 0;
-            min-width: 200px;
-            transition: var(--transition);
-        }
-
-        .dropdown-item {
-            color: var(--text-color);
-            padding: 10px 20px;
-            transition: var(--transition);
-        }
-
-        .dropdown-item:hover {
-            background: rgba(0, 123, 255, 0.1);
-            color: var(--secondary-color);
-        }
-
-        /* ===== THEME TOGGLER ===== */
-        .theme-toggler {
-            background: rgba(255, 255, 255, 0.15);
-            border: none;
-            color: var(--header-text);
-            font-size: 1.3rem;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: var(--transition);
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .theme-toggler:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.1);
-        }
-
-        /* ===== BACK BUTTON ===== */
+        
         .back-btn {
             position: fixed;
-            top: 100px;
-            left: 30px;
+            top: 80px;
+            left: 20px;
             z-index: 999;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -268,18 +254,200 @@
             transition: var(--transition);
             font-size: 1rem;
             font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
-
+        
         .back-btn:hover {
             background: var(--secondary-color);
             color: white;
             transform: translateY(-2px);
         }
-
-        /* ===== AI CHATBOT BUTTON ===== */
+        
+        .container {
+            max-width: 1300px;
+            margin: 120px auto 80px;
+            padding: 0 20px;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border: none;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .card-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .badge {
+            font-size: 0.85em;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: var(--accent-color);
+            color: var(--primary-color);
+        }
+        
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        
+        .status-badge.normal,
+        .status-badge.stabil {
+            background-color: var(--status-normal);
+            color: white;
+        }
+        
+        .status-badge.warning {
+            background-color: var(--status-warning);
+            color: #212529;
+        }
+        
+        .status-badge.alarm {
+            background-color: var(--status-alarm);
+            color: white;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 350px;
+            background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+            border-radius: 12px;
+            padding: 10px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        [data-theme="dark"] .chart-container {
+            background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
+        }
+        
+        .alert-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .list-group-item {
+            background: var(--input-bg);
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+            transition: var(--transition);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow-soft);
+        }
+        
+        .list-group-item:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        [data-theme="dark"] .list-group-item:hover {
+            background: #3a3a3a;
+        }
+        
+        .normal {
+            color: var(--status-normal);
+        }
+        
+        .warning {
+            color: var(--status-warning);
+        }
+        
+        .alarm {
+            color: var(--status-alarm);
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow-soft);
+        }
+        
+        .modal-header {
+            background: var(--header-bg);
+            color: var(--header-text);
+            border-bottom: none;
+            padding: 20px;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-footer {
+            border-top: none;
+            padding: 15px 20px;
+        }
+        
+        .modal-table {
+            background: var(--input-bg);
+            color: var(--text-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .modal-table th,
+        .modal-table td {
+            text-align: center;
+            font-size: 0.95em;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .station-select {
+            margin-bottom: 25px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-soft);
+        }
+        
+        .station-info {
+            margin-top: 15px;
+            font-size: 0.95em;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        h2.text-center {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        
+        h4 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        /* AI Chatbot Button */
+        
         .ai-chatbot-btn {
             position: fixed;
             bottom: 30px;
@@ -294,62 +462,84 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 2rem;
             box-shadow: 0 4px 15px rgba(0, 153, 255, 0.881);
             transition: var(--transition);
             cursor: pointer;
-            animation: float 3s ease-in-out infinite;
         }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
+        
         .ai-chatbot-btn:hover {
-            transform: scale(1.15) rotate(10deg);
+            transform: scale(1.1) rotate(5deg);
             box-shadow: 0 6px 20px rgba(6, 159, 248, 0.866);
             background: linear-gradient(135deg, #029af2, var(--secondary-color));
         }
-
+        
         .ai-chatbot-btn i {
             animation: pulse 2s infinite;
         }
-
+        
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
-
-        /* ===== RESPONSIVE ===== */
+        
         @media (max-width: 768px) {
             .header {
                 padding: 10px 15px;
-                height: 70px;
             }
-
-            .header.scrolled {
-                height: 50px;
+            .logo-container {
+                gap: 10px;
             }
-
             .logo {
                 height: 40px;
             }
-
+            .header-right {
+                gap: 15px;
+            }
             .back-btn {
-                top: 80px;
+                top: 70px;
                 left: 15px;
                 padding: 10px 15px;
-                font-size: 0.9rem;
             }
-
+            .container {
+                margin: 100px auto 60px;
+                padding: 0 15px;
+            }
+            .chart-container {
+                height: 280px;
+            }
             .ai-chatbot-btn {
                 bottom: 20px;
                 right: 20px;
                 width: 50px;
                 height: 50px;
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo {
+                height: 35px;
+            }
+            .card-title {
+                font-size: 1.2rem;
+            }
+            .modal-table th,
+            .modal-table td {
+                font-size: 0.85em;
+                padding: 10px;
+            }
+            h2.text-center {
+                font-size: 1.6rem;
+            }
+            h4 {
                 font-size: 1.3rem;
             }
         }
@@ -357,93 +547,677 @@
 </head>
 
 <body>
-    <!-- ===== HEADER ===== -->
-    <header class="header" id="header">
+    <header class="header">
         <div class="logo-container" onclick="window.location.href='stations.html'">
             <img src="railsafe.png" alt="RailSafe Logo" class="logo">
             <img src="iconr.png" alt="Partner Logo 1" class="logo">
             <img src="tstu.png" alt="Partner Logo 2" class="logo">
         </div>
         <div class="header-right">
-            <button class="theme-toggler" onclick="toggleTheme()" id="theme-toggler">
-                <i class="fas fa-moon" id="theme-icon"></i>
-            </button>
-            <a href="profil.html" class="profile-link" id="profile-link" title="Profil va Sozlamalar">
-                <i class="fas fa-user"></i>
+            <a href="profil.html" class="profile-link" id="profile-link" title="Profil va Sozlamalar"><i class="fas fa-user"></i></a>
+            <a href="note.html" class="notification-bell" id="notification-bell" title="Bildirishnomalar">
+                <span class="notification-badge">3</span><i class="fas fa-bell"></i>
             </a>
-            <div class="dropdown">
-                <a class="notification-bell dropdown-toggle" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Bildirishnomalar">
-                    <span class="notification-badge">3</span>
-                    <i class="fas fa-bell"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                    <li><a class="dropdown-item" href="#">Yangi xabarlar (3)</a></li>
-                    <li><a class="dropdown-item" href="#">Tizim xatolari</a></li>
-                    <li><a class="dropdown-item" href="#">Ogohlantirishlar</a></li>
-                </ul>
-            </div>
-            <button class="logout-btn" onclick="confirmLogout()" id="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> <span id="logout-text">Chiqish</span>
-            </button>
+            <button class="logout-btn" onclick="confirmLogout()" id="logout-btn"></button>
         </div>
     </header>
-
-    <!-- ===== BACK BUTTON ===== -->
     <button class="back-btn" onclick="window.location='index.html'" aria-label="Back" id="back-btn">
-        <i class="fas fa-arrow-left"></i> <span id="back-text">Orqaga</span>
+        <i class="fas fa-arrow-left"></i>
     </button>
-
-    <!-- ===== MAIN CONTENT ===== -->
-    <main class="container mt-5 pt-5">
-        <!-- Your existing content here -->
+    <main class="container mt-3">
         <h2 class="text-center" id="stationName">Stansiya Holati</h2>
-        <!-- ... -->
+        <div class="station-select">
+            <label for="stationSelect" id="station-select-label">Stansiyani tanlang:</label>
+            <select id="stationSelect" class="form-select" onchange="changeStation()">
+                <!-- Options JavaScript orqali to'ldiriladi -->
+            </select>
+            <div id="stationInfo" class="station-info"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 mb-3">
+                <div class="card mb-3" onclick="window.location='trains.html'" role="button" tabindex="0">
+                    <div class="card-body">
+                        <h5 class="card-title" id="overview-title">Umumiy Ma'lumot <span class="badge" id="overview-badge">Batafsil</span></h5>
+                        <p id="trainCount" class="mb-2">Necha poyezd keldi: <strong>Yuklanmoqda...</strong></p>
+                        <p id="currentTime" class="mb-0">Joriy vaqt: <strong>Yuklanmoqda...</strong></p>
+                        <p id="avgTemp" class="mb-0">O'rtacha harorat: <strong>Yuklanmoqda...</strong></p>
+                    </div>
+                </div>
+                <div class="card" onclick="window.location='diaknoztika.html'" role="button" tabindex="0">
+                    <div class="card-body">
+                        <h5 class="card-title" id="diagnostics-title">Diaknostika Holati <span class="badge" id="diagnostics-badge">Ishchi holatda</span></h5>
+                        <p id="leftDevice" class="mb-2">Chap tizim holati: <strong>Yuklanmoqda...</strong></p>
+                        <p id="rightDevice" class="mb-0">O'ng tizim holati: <strong>Yuklanmoqda...</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" id="chart-title">Harorat Grafigi <span class="badge" id="chart-badge">Real vaqt</span></h5>
+                        <div class="chart-container">
+                            <canvas id="tempChart" aria-label="Train temperature chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="mt-3">
+            <h4 id="alerts-title">Ogohlantirishlar</h4>
+            <ul id="alertList" class="list-group"></ul>
+        </section>
     </main>
-
-    <!-- ===== AI CHATBOT BUTTON ===== -->
+    <!-- AI Chatbot Button -->
     <button class="ai-chatbot-btn" onclick="window.location.href='chatbot.html'" title="AI Chatbot bilan suhbatlashish">
         <i class="fas fa-robot"></i>
     </button>
-
-    <!-- ===== SCRIPTS ===== -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="modal fade" id="trainDetailsModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Poyezd Harorat Jadvali</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="modal-close-btn"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered modal-table" aria-label="Train Temperature Table" id="temps-table">
+                        <thead>
+                            <tr>
+                                <th scope="col" id="modal-col-axle">G'ildirak O'qi</th>
+                                <th scope="col" id="modal-col-right">O'ng (°C)</th>
+                                <th scope="col" id="modal-col-left">Chap (°C)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tempsTable"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal" id="modal-close">Yopish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
-        // ===== HEADER SCROLL ANIMATION =====
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+        // Skript qismi o'zgarmagan holda saqlangan, chunki so'rov faqat dizayn haqida edi.
+        const translations = {
+            uz: {
+                title: "RailSafe - Stansiyalar Holati",
+                back_btn: "Orqaga",
+                back_btn_aria: "Orqaga qaytish",
+                station_status: "{name} Holati",
+                station_not_found: "Stansiya topilmadi",
+                overview_title: "Umumiy Ma'lumot",
+                overview_badge: "Batafsil",
+                diagnostics_title: "Diaknostika Holati",
+                diagnostics_badge: "Ishchi holatda",
+                chart_title: "Harorat Grafigi",
+                chart_badge: "Real vaqt",
+                alerts_title: "Ogohlantirishlar",
+                train_count: "Necha poyezd keldi:",
+                current_time: "Joriy vaqt:",
+                avg_temp: "O'rtacha harorat:",
+                left_device: "Chap tizim holati:",
+                right_device: "O'ng tizim holati:",
+                diagnostics_alert: "Diaknostika muammosi",
+                alert_check: "Tekshirish",
+                alert_details: "Batafsil",
+                left_status_normal: "Ishchi holatda (Normal)",
+                right_status_normal: "Ishchi holatda (Normal)",
+                chart_label: "Poyezd harorati (°C)",
+                chart_avg_label: "O'rtacha ({temp}°C)",
+                chart_y_axis: "Harorat (°C)",
+                chart_x_axis: "Vaqt",
+                chart_aria: "Poyezdlar bo'yicha harorat grafigi vaqt bo'yicha",
+                status_normal: "Normal",
+                status_trivoga_1: "TREVOGA-1",
+                status_trivoga_2: "TREVOGA-2",
+                priority_high: "Yuqori",
+                priority_medium: "O'rta",
+                train_alert: "Yuk tashovchi poyezd {id} — harorat: {temp}°C",
+                logout: "Chiqish",
+                confirm_logout: "Haqiqatdan ham tizimdan chiqmoqchimisiz?",
+                profile_link_title: "Profil va Sozlamalar",
+                notification_bell_title: "Bildirishnomalar",
+                station_select_label: "Stansiyani tanlang:",
+                modal_title: "Poyezd Harorat Jadvali",
+                modal_col_axle: "G'ildirak O'qi",
+                modal_col_right: "O'ng (°C)",
+                modal_col_left: "Chap (°C)",
+                modal_close: "Yopish"
+            },
+            ru: {
+                title: "RailSafe - Состояние станций",
+                back_btn: "Назад",
+                back_btn_aria: "Вернуться назад",
+                station_status: "Состояние {name}",
+                station_not_found: "Станция не найдена",
+                overview_title: "Общая информация",
+                overview_badge: "Подробнее",
+                diagnostics_title: "Состояние диагностики",
+                diagnostics_badge: "Рабочий режим",
+                chart_title: "График температуры",
+                chart_badge: "Реальное время",
+                alerts_title: "Уведомления",
+                train_count: "Количество прибывших поездов:",
+                current_time: "Текущее время:",
+                avg_temp: "Средняя температура:",
+                left_device: "Состояние левой системы:",
+                right_device: "Состояние правой системы:",
+                diagnostics_alert: "Проблема диагностики",
+                alert_check: "Проверить",
+                alert_details: "Подробнее",
+                left_status_normal: "Рабочий режим (Нормально)",
+                right_status_normal: "Рабочий режим (Нормально)",
+                chart_label: "Температура поезда (°C)",
+                chart_avg_label: "Средняя ({temp}°C)",
+                chart_y_axis: "Температура (°C)",
+                chart_x_axis: "Время",
+                chart_aria: "График температуры поездов по времени",
+                status_normal: "Нормально",
+                status_trivoga_1: "ТРЕВОГА-1",
+                status_trivoga_2: "ТРЕВОГА-2",
+                priority_high: "Высокий",
+                priority_medium: "Средний",
+                train_alert: "Грузовой поезд {id} — температура: {temp}°C",
+                logout: "Выход",
+                confirm_logout: "Вы действительно хотите выйти из системы?",
+                profile_link_title: "Профиль и настройки",
+                notification_bell_title: "Уведомления",
+                station_select_label: "Выберите станцию:",
+                modal_title: "Таблица температуры поезда",
+                modal_col_axle: "Ось колеса",
+                modal_col_right: "Правая (°C)",
+                modal_col_left: "Левая (°C)",
+                modal_close: "Закрыть"
+            },
+            en: {
+                title: "RailSafe - Stations Status",
+                back_btn: "Back",
+                back_btn_aria: "Go back",
+                station_status: "{name} Status",
+                station_not_found: "Station not found",
+                overview_title: "Overview",
+                overview_badge: "Details",
+                diagnostics_title: "Diagnostics Status",
+                diagnostics_badge: "Operational",
+                chart_title: "Temperature Chart",
+                chart_badge: "Real-time",
+                alerts_title: "Alerts",
+                train_count: "Trains Arrived:",
+                current_time: "Current Time:",
+                avg_temp: "Average Temperature:",
+                left_device: "Left System Status:",
+                right_device: "Right System Status:",
+                diagnostics_alert: "Diagnostics Issue",
+                alert_check: "Check",
+                alert_details: "Details",
+                left_status_normal: "Operational (Normal)",
+                right_status_normal: "Operational (Normal)",
+                chart_label: "Train Temperature (°C)",
+                chart_avg_label: "Average ({temp}°C)",
+                chart_y_axis: "Temperature (°C)",
+                chart_x_axis: "Time",
+                chart_aria: "Train temperature chart over time",
+                status_normal: "Normal",
+                status_trivoga_1: "ALARM-1",
+                status_trivoga_2: "ALARM-2",
+                priority_high: "High",
+                priority_medium: "Medium",
+                train_alert: "Freight Train {id} — temperature: {temp}°C",
+                logout: "Logout",
+                confirm_logout: "Are you sure you want to log out?",
+                profile_link_title: "Profile and Settings",
+                notification_bell_title: "Notifications",
+                station_select_label: "Select Station:",
+                modal_title: "Train Temperature Table",
+                modal_col_axle: "Wheel Axle",
+                modal_col_right: "Right (°C)",
+                modal_col_left: "Left (°C)",
+                modal_close: "Close"
             }
-        });
+        };
+        let currentLang = localStorage.getItem('language') || 'uz';
+        let currentTheme = localStorage.getItem('theme') || 'light';
+        let tempChart = null;
+        let currentTrains = [];
+        let selectedStation = null;
+        const stations = [{
+            id: "blok-post-kattakurgan",
+            name: "Блок-Пост-Каттакурган",
+            coords: [39.9024, 66.2457],
+            description: "Kattakurgan blok-posti, Samarqand viloyati"
+        }, {
+            id: "kattakurgan-rzd28",
+            name: "Каттакурган-Рзд№28",
+            coords: [39.8800, 66.2800],
+            description: "Raz'ezd N28 Kattakurgan yaqinida, Samarqand viloyati"
+        }, {
+            id: "nurbulak-blok-post",
+            name: "Нурбулак-Блок-пост",
+            coords: [39.8500, 66.4068],
+            description: "Nurbulak blok-posti, Nurobod tumani"
+        }, {
+            id: "rzd24-nurbulak",
+            name: "Рзд№24-Нурбулак",
+            coords: [39.7000, 66.8000],
+            description: "Raz'ezd N24 Nurbuloq yaqinida, Pastdarg'om tumani"
+        }, {
+            id: "yangiyul-paxta",
+            name: "Янгийўл-Пахта",
+            coords: [41.0139, 68.9449],
+            description: "Paxta stansiyasi (Yangiyo'l-Paxta bo'limi), Toshkent viloyati"
+        }, {
+            id: "paxta-almazor",
+            name: "Пахта-Алмазар",
+            coords: [40.9621, 68.8583],
+            description: "Almazor stansiyasi (Paxta-Almazor bo'limi), Toshkent viloyati"
+        }, {
+            id: "tashkent",
+            name: "Ташкент",
+            coords: [41.3111, 69.2406],
+            description: "Toshkent temir yo'l stansiyasi, Toshkent shahri"
+        }, {
+            id: "samarkand",
+            name: "Самарканд",
+            coords: [39.6825, 66.9286],
+            description: "Samarqand temir yo'l stansiyasi, Samarqand viloyati"
+        }, {
+            id: "bukhara",
+            name: "Бухара",
+            coords: [39.7164, 64.5511],
+            description: "Buxoro temir yo'l stansiyasi, Buxoro viloyati"
+        }, {
+            id: "navoi",
+            name: "Навои",
+            coords: [40.1, 65.3667],
+            description: "Navoiy temir yo'l stansiyasi, Navoiy viloyati"
+        }, {
+            id: "jizzak",
+            name: "Джизак",
+            coords: [40.133, 67.833],
+            description: "Jizzax temir yo'l stansiyasi, Jizzax viloyati"
+        }, {
+            id: "gulistan",
+            name: "Гулистан",
+            coords: [40.4915, 68.7811],
+            description: "Guliston temir yo'l stansiyasi, Sirdaryo viloyati"
+        }, {
+            id: "kungrad",
+            name: "Кунград",
+            coords: [43.0425, 58.8503],
+            description: "Kungrad temir yo'l stansiyasi, Qoraqalpog'iston Respublikasi"
+        }, {
+            id: "urgench",
+            name: "Ургенч",
+            coords: [41.55, 60.6333],
+            description: "Urganch temir yo'l stansiyasi, Xorazm viloyati"
+        }, {
+            id: "andijan",
+            name: "Андижан",
+            coords: [40.7821, 72.3442],
+            description: "Andijon temir yo'l stansiyasi, Andijon viloyati"
+        }, {
+            id: "fergana",
+            name: "Фергана",
+            coords: [40.3844, 71.7864],
+            description: "Farg'ona temir yo'l stansiyasi, Farg'ona viloyati"
+        }, {
+            id: "termez",
+            name: "Термез",
+            coords: [37.2611, 67.3086],
+            description: "Termiz temir yo'l stansiyasi, Surxondaryo viloyati"
+        }, {
+            id: "karshi",
+            name: "Карши",
+            coords: [38.8667, 65.8],
+            description: "Qarshi temir yo'l stansiyasi, Qashqadaryo viloyati"
+        }, {
+            id: "nukus",
+            name: "Нукус",
+            coords: [42.4531, 59.6103],
+            description: "Nukus temir yo'l stansiyasi, Qoraqalpog'iston Respublikasi"
+        }, {
+            id: "xiva",
+            name: "Хива",
+            coords: [41.3833, 60.35],
+            description: "Xiva temir yo'l stansiyasi, Xorazm viloyati"
+        }];
 
-        // ===== THEME TOGGLER =====
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            document.documentElement.lang = lang;
+            document.title = translations[lang].title;
+            document.getElementById('back-btn').innerHTML = `<i class="fas fa-arrow-left"></i> ${translations[lang].back_btn}`;
+            document.getElementById('back-btn').setAttribute('aria-label', translations[lang].back_btn_aria);
+            document.getElementById('overview-title').innerHTML = `${translations[lang].overview_title} <span class="badge" id="overview-badge">${translations[lang].overview_badge}</span>`;
+            document.getElementById('diagnostics-title').innerHTML = `${translations[lang].diagnostics_title} <span class="badge" id="diagnostics-badge">${translations[lang].diagnostics_badge}</span>`;
+            document.getElementById('chart-title').innerHTML = `${translations[lang].chart_title} <span class="badge" id="chart-badge">${translations[lang].chart_badge}</span>`;
+            document.getElementById('alerts-title').textContent = translations[lang].alerts_title;
+            document.getElementById('tempChart').setAttribute('aria-label', translations[lang].chart_aria);
+            document.getElementById('avgTemp').innerHTML = `${translations[lang].avg_temp} <strong>Yuklanmoqda...</strong>`;
+            document.getElementById('trainCount').innerHTML = `${translations[lang].train_count} <strong>Yuklanmoqda...</strong>`;
+            document.getElementById('currentTime').innerHTML = `${translations[lang].current_time} <strong>Yuklanmoqda...</strong>`;
+            document.getElementById('leftDevice').innerHTML = `${translations[lang].left_device} <strong>Yuklanmoqda...</strong>`;
+            document.getElementById('rightDevice').innerHTML = `${translations[lang].right_device} <strong>Yuklanmoqda...</strong>`;
+            document.getElementById('logout-btn').textContent = translations[lang].logout;
+            document.getElementById('profile-link').title = translations[lang].profile_link_title;
+            document.getElementById('notification-bell').title = translations[lang].notification_bell_title;
+            document.getElementById('station-select-label').textContent = translations[lang].station_select_label;
+            document.getElementById('modal-col-axle').textContent = translations[lang].modal_col_axle;
+            document.getElementById('modal-col-right').textContent = translations[lang].modal_col_right;
+            document.getElementById('modal-col-left').textContent = translations[lang].modal_col_left;
+            document.getElementById('modal-close').textContent = translations[lang].modal_close;
+            initializeStationPage();
+        }
+
         function toggleTheme() {
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
             const newTheme = isDark ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
-            const themeIcon = document.getElementById('theme-icon');
-            themeIcon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
         }
 
-        // ===== LOGOUT CONFIRMATION =====
         function confirmLogout() {
-            if (confirm("Haqiqatdan ham tizimdan chiqmoqchimisiz?")) {
+            if (confirm(translations[currentLang].confirm_logout)) {
                 localStorage.clear();
                 window.location.href = 'index.html';
             }
         }
 
-        // ===== INITIALIZE PAGE =====
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            const themeIcon = document.getElementById('theme-icon');
-            themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-        });
+        function initializeStationPage() {
+            const select = document.getElementById('stationSelect');
+            select.innerHTML = '';
+            stations.forEach(st => {
+                const option = document.createElement('option');
+                option.value = st.id;
+                option.textContent = st.name;
+                select.appendChild(option);
+            });
+            const urlParams = new URLSearchParams(window.location.search);
+            let stationId = urlParams.get('id');
+            if (!stationId || !stations.find(s => s.id === stationId)) {
+                stationId = stations[0].id;
+            }
+            select.value = stationId;
+            changeStation();
+            updateDashboard();
+            setInterval(updateDashboard, 30000);
+        }
+
+        function changeStation() {
+            const select = document.getElementById('stationSelect');
+            const stationId = select.value;
+            selectedStation = stations.find(s => s.id === stationId);
+            const stationNameElement = document.getElementById('stationName');
+            if (selectedStation) {
+                stationNameElement.textContent = translations[currentLang].station_status.replace('{name}', selectedStation.name);
+                document.getElementById('stationInfo').textContent = `Tavsif: ${selectedStation.description} | Koordinatalar: ${selectedStation.coords.join(', ')}`;
+            } else {
+                stationNameElement.textContent = translations[currentLang].station_not_found;
+                document.getElementById('stationInfo').textContent = '';
+            }
+            updateDashboard();
+        }
+
+        function getMockTrains() {
+            const now = new Date();
+            const trainIds = [4925, 3004, 300, 2202, 3372, 3375, 4802, 5001, 6002];
+            return trainIds.map((id, index) => {
+                const time = new Date(now.getTime() - (trainIds.length - index) * 300000);
+                const temp = Math.floor(Math.random() * (100 - 30) + 30);
+                return {
+                    id: id,
+                    temp: temp,
+                    time: time,
+                    status: getTemperatureStatus(temp),
+                    priority: getPriority(temp)
+                };
+            });
+        }
+
+        function getTemperatureStatus(temp) {
+            if (temp < 45) return translations[currentLang].status_normal;
+            if (temp <= 84) return translations[currentLang].status_trivoga_1;
+            return translations[currentLang].status_trivoga_2;
+        }
+
+        function getPriority(temp) {
+            if (temp < 45) return '';
+            if (temp <= 84) return translations[currentLang].priority_medium;
+            return translations[currentLang].priority_high;
+        }
+
+        function getStatusClass(status) {
+            if (status === translations[currentLang].status_normal) return 'normal';
+            if (status === translations[currentLang].status_trivoga_1) return 'warning';
+            return 'alarm';
+        }
+
+        function getTemperatureStatusClass(temp) {
+            if (temp < 45) return 'normal';
+            if (temp <= 84) return 'warning';
+            return 'alarm';
+        }
+
+        function updateDashboard() {
+            try {
+                currentTrains = getMockTrains();
+                const mockData = {
+                    trainCount: currentTrains.length,
+                    currentTime: new Date().toLocaleString(currentLang === 'uz' ? 'uz-UZ' : currentLang === 'ru' ? 'ru-RU' : 'en-US', {
+                        timeZone: 'Asia/Tashkent'
+                    }),
+                    diagnostics: {
+                        left: {
+                            status: translations[currentLang].status_normal,
+                            details: translations[currentLang].left_status_normal
+                        },
+                        right: {
+                            status: translations[currentLang].status_normal,
+                            details: translations[currentLang].right_status_normal
+                        }
+                    }
+                };
+                const temps = currentTrains.map(t => t.temp);
+                const averageTemp = temps.length > 0 ? temps.reduce((a, b) => a + b, 0) / temps.length : 0;
+                document.getElementById('trainCount').innerHTML = `${translations[currentLang].train_count} <strong>${mockData.trainCount}</strong>`;
+                document.getElementById('currentTime').innerHTML = `${translations[currentLang].current_time} <strong>${mockData.currentTime}</strong>`;
+                document.getElementById('avgTemp').innerHTML = `${translations[currentLang].avg_temp} <strong>${averageTemp.toFixed(1)}°C</strong>`;
+                document.getElementById('leftDevice').innerHTML = `${translations[currentLang].left_device} <strong class="status-badge normal">${mockData.diagnostics.left.details}</strong>`;
+                document.getElementById('rightDevice').innerHTML = `${translations[currentLang].right_device} <strong class="status-badge normal">${mockData.diagnostics.right.details}</strong>`;
+                const alertList = document.getElementById('alertList');
+                alertList.innerHTML = '';
+                currentTrains.forEach((train, index) => {
+                    if (train.temp >= 45) {
+                        const icon = train.temp >= 85 ? '🚨' : '⚠️';
+                        const li = document.createElement('li');
+                        li.className = `list-group-item d-flex justify-content-between align-items-center ${getTemperatureStatusClass(train.temp)}`;
+                        li.innerHTML = `
+                            <div>
+                                <span class="alert-icon">${icon}</span>
+                                <div class="${getTemperatureStatusClass(train.temp)} fw-bold">${train.status} (${train.priority})</div>
+                                <div>${translations[currentLang].train_alert.replace('{id}', train.id).replace('{temp}', train.temp)}</div>
+                            </div>
+                            <div>
+                                <small>${train.time.toLocaleTimeString(currentLang === 'uz' ? 'uz-UZ' : currentLang === 'ru' ? 'ru-RU' : 'en-US', { timeZone: 'Asia/Tashkent' })}</small>
+                                <button class="btn btn-sm btn-outline-danger ms-2" onclick="openTrainModal(${index})">${translations[currentLang].alert_check}</button>
+                            </div>`;
+                        alertList.appendChild(li);
+                    }
+                });
+                if (Math.random() < 0.1) {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item d-flex justify-content-between align-items-center alarm';
+                    li.innerHTML = `
+                        <div>
+                            <span class="alert-icon">🚨</span>
+                            <div class="alarm fw-bold">${translations[currentLang].diagnostics_alert}</div>
+                        </div>
+                        <div>
+                            <small>${new Date().toLocaleTimeString()}</small>
+                            <button class="btn btn-sm btn-outline-danger ms-2">${translations[currentLang].alert_details}</button>
+                        </div>`;
+                    alertList.appendChild(li);
+                }
+                const times = currentTrains.map(t => t.time.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }));
+                updateTempChart(times, temps, averageTemp);
+            } catch (error) {
+                console.error('Dashboard yangilashda xato:', error);
+            }
+        }
+
+        function openTrainModal(trainIndex) {
+            try {
+                const train = currentTrains[trainIndex];
+                document.getElementById('modalTitle').textContent = `${translations[currentLang].modal_title.replace('Poyezd', `Train-${train.id}`)}`;
+                const tbody = document.getElementById('tempsTable');
+                tbody.innerHTML = '';
+                const axleData = [];
+                for (let i = 0; i < 4; i++) {
+                    let baseTemp = i < 2 ? train.temp : train.temp - (10 + i * 5);
+                    const variation = Math.floor(Math.random() * 5) - 2;
+                    const right = Math.max(30, baseTemp + variation);
+                    const left = Math.max(30, right + (Math.random() * 4 - 2));
+                    axleData.push({ right, left });
+                }
+                axleData.forEach((data, i) => {
+                    const tr = document.createElement('tr');
+                    const rightClass = getTemperatureStatusClass(data.right);
+                    const leftClass = getTemperatureStatusClass(data.left);
+                    tr.innerHTML = `
+                        <td>${i + 1}</td>
+                        <td class="${rightClass}">${data.right.toFixed(1)}°C</td>
+                        <td class="${leftClass}">${data.left.toFixed(1)}°C</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+                const modal = new bootstrap.Modal(document.getElementById('trainDetailsModal'));
+                modal.show();
+            } catch (error) {
+                console.error('Modal ochishda xato:', error);
+            }
+        }
+        function updateTempChart(times, temps, averageTemp) {
+            try {
+                const ctx = document.getElementById('tempChart').getContext('2d');
+                const pointColors = temps.map(temp =>
+                    temp < 45 ? 'rgba(25, 135, 84, 0.8)' :
+                    temp <= 84 ? 'rgba(255, 193, 7, 0.8)' :
+                    'rgba(220, 53, 69, 0.8)');
+                if (tempChart) tempChart.destroy();
+                tempChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: times,
+                        datasets: [{
+                            label: translations[currentLang].chart_label,
+                            data: temps,
+                            borderColor: '#003366',
+                            backgroundColor: 'rgba(0,51,102,0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: pointColors,
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            lineWidth: 3
+                        }, {
+                            label: translations[currentLang].chart_avg_label.replace('{temp}', averageTemp.toFixed(1)),
+                            data: Array(temps.length).fill(averageTemp),
+                            borderColor: '#ff9800',
+                            borderDash: [10, 5],
+                            fill: false,
+                            pointRadius: 0,
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                min: 20,
+                                max: 110,
+                                title: {
+                                    display: true,
+                                    text: translations[currentLang].chart_y_axis,
+                                    font: { size: 12, weight: 'bold' }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.1)' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '°C';
+                                    }
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: translations[currentLang].chart_x_axis,
+                                    font: { size: 12, weight: 'bold' }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.1)' }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    font: { size: 11 },
+                                    usePointStyle: true
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0,0,0,0.8)',
+                                titleColor: 'white',
+                                bodyColor: 'white',
+                                borderColor: '#003366',
+                                borderWidth: 1,
+                                callbacks: {
+                                    title: function(context) {
+                                        return `Poyezd ${currentTrains[context[0].dataIndex].id}`;
+                                    },
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) label += ': ';
+                                        label += context.parsed.y + '°C';
+                                        if (context.datasetIndex === 0) {
+                                            label += ` - ${getTemperatureStatus(context.parsed.y)}`;
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeInOutQuart'
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Grafik yangilashda xato:', error);
+            }
+        }
+        function initializePage() {
+            setLanguage(currentLang);
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            initializeStationPage();
+        }
+        document.addEventListener('DOMContentLoaded', initializePage);
     </script>
 </body>
 
-</html>
+</html> 
+
