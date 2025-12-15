@@ -4,69 +4,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RailSafe - Profil</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous">
+    <title>RailSafe - Profil Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f5f5f5;
-            --text-color: #333;
-            --header-bg: #60d1decb;
-            --header-text: white;
-            --card-bg: white;
-            --border-color: #ddd;
-            --stats-primary: #007bff;
-            --input-bg: white;
+            --primary-color: #0a2540;
+            --secondary-color: #007bff;
+            --accent-color: #ffd700;
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --header-bg: linear-gradient(135deg, #3390db, #059fd2);
+            --header-text: #ffffff;
+            --card-bg: #ffffff;
+            --border-color: #dee2e6;
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease-in-out;
+            --status-normal: #28a745;
+            --status-warning: #ffc107;
+            --status-alarm: #dc3545;
         }
 
         [data-theme="dark"] {
-            --bg-color: #121212;
+            --primary-color: #ffffff;
+            --secondary-color: #60a5fa;
+            --accent-color: #ffd700;
+            --bg-color: #1a1a1a;
             --text-color: #e0e0e0;
-            --header-bg: #1e3a8a;
+            --header-bg: linear-gradient(135deg, #119eeb, #1f73c7);
             --header-text: #e0e0e0;
             --card-bg: #2c2c2c;
             --border-color: #444;
-            --stats-primary: #60a5fa;
-            --input-bg: #3a3a3a;
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s;
+            transition: var(--transition);
+            overflow-x: hidden;
         }
 
+        /* ===== HEADER ===== */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 15px;
+            padding: 15px 30px;
             background: var(--header-bg);
             color: var(--header-text);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            flex-wrap: wrap;
+            box-shadow: var(--shadow-soft);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 80px;
+            transition: var(--transition);
+        }
+
+        .header.scrolled {
+            height: 60px;
+            padding: 10px 20px;
         }
 
         .logo-container {
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
+            gap: 15px;
             cursor: pointer;
-            transition: opacity 0.3s;
+            transition: var(--transition);
         }
 
         .logo-container:hover {
-            opacity: 0.8;
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
 
         .logo {
             height: 50px;
-            margin-right: 15px;
-            transition: transform 0.3s;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
         }
 
         .logo:hover {
@@ -76,25 +98,25 @@
         .header-right {
             display: flex;
             align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 20px;
         }
 
         .profile-toggle {
             background: none;
             border: none;
             color: var(--header-text);
-            font-size: 2rem;
+            font-size: 1.8rem;
             cursor: pointer;
-            padding: 5px;
+            padding: 8px;
             border-radius: 50%;
-            transition: background 0.3s, transform 0.3s;
+            transition: var(--transition);
             position: relative;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .profile-toggle:hover {
@@ -105,30 +127,13 @@
         .profile-toggle::after {
             content: '';
             position: absolute;
-            bottom: -5px;
-            right: -5px;
+            bottom: 0;
+            right: 0;
             width: 12px;
             height: 12px;
             background: #4caf50;
             border-radius: 50%;
             border: 2px solid var(--header-bg);
-        }
-
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: var(--header-text);
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 8px 12px;
-            border-radius: 8px;
-            transition: background 0.3s, transform 0.3s;
-            text-decoration: none;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
         }
 
         .dropdown-menu {
@@ -138,14 +143,13 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow-soft);
             min-width: 220px;
             z-index: 1001;
             opacity: 0;
             visibility: hidden;
             transform: translateY(-10px);
-            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
-            overflow: hidden;
+            transition: var(--transition);
         }
 
         .dropdown-menu.show {
@@ -155,205 +159,284 @@
         }
 
         .dropdown-item {
-            display: block;
-            padding: 14px 18px;
+            padding: 10px 15px;
             color: var(--text-color);
-            text-decoration: none;
-            border-bottom: 1px solid var(--border-color);
-            transition: background 0.3s ease, padding-left 0.3s ease;
-            position: relative;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .dropdown-item:hover {
-            background: #f8f9fa;
-            padding-left: 24px;
+            background: rgba(0, 123, 255, 0.1);
         }
 
-        .dropdown-item::before {
-            content: '';
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 4px;
-            background: transparent;
+        .notification-bell {
+            position: relative;
+            font-size: 1.8rem;
+            color: var(--header-text);
+            padding: 8px;
             border-radius: 50%;
-            transition: background 0.3s ease;
+            transition: var(--transition);
+            animation: ring 2s linear infinite paused;
         }
 
-        .dropdown-item:hover::before {
-            background: #007bff;
+        .notification-bell:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+            animation-play-state: running;
         }
 
-        .dropdown-item:last-child {
-            border-bottom: none;
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bounce 1s infinite;
         }
 
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: var(--header-text);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* ===== BACK BUTTON ===== */
         .back-btn {
             position: fixed;
             top: 100px;
-            left: 20px;
-            z-index: 1000;
+            left: 30px;
+            z-index: 999;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: var(--text-color);
-            padding: 10px 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: background 0.3s;
+            padding: 12px 18px;
+            border-radius: 50px;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .back-btn:hover {
-            background: #e9ecef;
+            background: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
         }
 
+        /* ===== MAIN CONTENT ===== */
         .container {
-            max-width: 800px;
-            margin: 120px auto 20px;
-            padding: 0 15px;
+            max-width: 1200px;
+            margin: 120px auto 40px;
+            padding: 0 20px;
         }
 
         .card {
             background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-soft);
             overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
         }
 
         .card-header {
             background: var(--header-bg);
             color: var(--header-text);
-            padding: 15px 20px;
-            font-weight: bold;
-            border-bottom: 1px solid var(--border-color);
+            padding: 18px 25px;
+            font-weight: 600;
+            border-bottom: none;
         }
 
         .card-body {
-            padding: 20px;
+            padding: 25px;
         }
 
         .list-group-item {
             background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin-bottom: 10px;
-            padding: 12px 15px;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 0;
             color: var(--text-color);
-            transition: background 0.3s;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .list-group-item:last-child {
+            border-bottom: none;
         }
 
         .list-group-item:hover {
-            background: #f8f9fa;
+            color: var(--secondary-color);
         }
 
         .list-group-item i {
-            margin-right: 10px;
-            color: var(--stats-primary);
+            color: var(--secondary-color);
+            font-size: 1.1rem;
         }
 
+        /* ===== STATS GRID ===== */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
         }
 
         .stat-card {
             background: var(--input-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
+            border-radius: 12px;
+            padding: 20px;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
         }
 
         .stat-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .stat-card h5 {
+        .stat-card h3 {
             margin: 0;
-            font-size: 1.5rem;
-            color: var(--stats-primary);
+            font-size: 2rem;
+            color: var(--secondary-color);
+            font-weight: 700;
         }
 
         .stat-card p {
             margin: 5px 0 0;
             font-size: 0.9rem;
             color: var(--text-color);
+            opacity: 0.8;
         }
 
-        .form-check-input {
-            background-color: var(--input-bg);
-            border-color: var(--border-color);
-        }
-
-        .form-check-input:checked {
-            background-color: var(--stats-primary);
-            border-color: var(--stats-primary);
-        }
-
-        .form-check-label {
-            color: var(--text-color);
-        }
-
-        .lang-section {
+        /* ===== CHARTS ===== */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
             margin-bottom: 20px;
         }
 
-        .lang-section label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: var(--stats-primary);
+        [data-theme="dark"] .chart-container {
+            background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
+        }
+
+        /* ===== ACTIVITY TABLE ===== */
+        .activity-table {
+            width: 100%;
+            background: var(--input-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .activity-table th,
+        .activity-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .activity-table th {
+            background: var(--header-bg);
+            color: var(--header-text);
+            font-weight: 600;
+        }
+
+        .activity-table tr:hover {
+            background: rgba(0, 123, 255, 0.05);
+        }
+
+        /* ===== SETTINGS SECTION ===== */
+        .settings-section {
+            margin: 30px 0;
+        }
+
+        .settings-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 20px;
+        }
+
+        .settings-card h4 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            font-weight: 600;
         }
 
         .lang-buttons {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
-        .lang-btn-settings {
-            padding: 8px 12px;
+        .lang-btn {
+            padding: 8px 15px;
             border: 1px solid var(--border-color);
             background: var(--card-bg);
             color: var(--text-color);
             border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
         }
 
-        .lang-btn-settings:hover,
-        .lang-btn-settings.active {
-            background: var(--stats-primary);
+        .lang-btn:hover,
+        .lang-btn.active {
+            background: var(--secondary-color);
             color: white;
-            border-color: var(--stats-primary);
-        }
-
-        .theme-section {
-            margin-bottom: 20px;
-        }
-
-        .theme-section label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: var(--stats-primary);
+            border-color: var(--secondary-color);
         }
 
         .theme-toggle {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
         .theme-toggle input[type="checkbox"] {
-            width: 44px;
+            width: 50px;
             height: 24px;
             background: #ccc;
             border-radius: 24px;
@@ -380,594 +463,588 @@
         }
 
         .theme-toggle input[type="checkbox"]:checked::before {
-            transform: translateX(20px);
+            transform: translateX(26px);
         }
 
-        .chatbot-section {
-            margin-top: 20px;
-            padding: 15px;
-            background: var(--input-bg);
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
+        /* ===== MODALS ===== */
+        .modal-content {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow-soft);
         }
 
-        .chatbot-section h6 {
-            color: var(--stats-primary);
-            margin-bottom: 10px;
-        }
-
-        .chatbot-btn {
-            width: 100%;
-            padding: 12px;
-            background: var(--stats-primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .chatbot-btn:hover {
-            background: #0056b3;
-        }
-
-        .btn-action {
-            margin: 10px 5px;
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-weight: bold;
-            transition: transform 0.3s;
-        }
-
-        .btn-action:hover {
-            transform: translateY(-1px);
-        }
-
-        .notification-bell {
-            position: relative;
-            font-size: 1.8rem;
+        .modal-header {
+            background: var(--header-bg);
             color: var(--header-text);
-            text-decoration: none;
-            padding: 8px;
-            border-radius: 50%;
-            transition: background 0.3s ease, transform 0.3s ease;
-            animation: ring 2s linear infinite;
+            border-bottom: none;
+            padding: 20px;
         }
 
-        .notification-bell:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
+        .modal-body {
+            padding: 25px;
         }
 
-        @keyframes ring {
-            0% { transform: rotate(0deg); }
-            10% { transform: rotate(-25deg); }
-            20% { transform: rotate(25deg); }
-            30% { transform: rotate(-12.5deg); }
-            40% { transform: rotate(6.25deg); }
-            50% { transform: rotate(0deg); }
-            100% { transform: rotate(0deg); }
+        .modal-footer {
+            border-top: none;
+            padding: 15px 25px;
         }
 
-        .notification-badge {
-            position: absolute;
-            top: -3px;
-            right: -3px;
-            background: #ff4444;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 11px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: bounce 1s infinite;
-            font-weight: bold;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-5px); }
-            60% { transform: translateY(-3px); }
-        }
-
-        /* Sections */
-        #profile-section { scroll-margin-top: 120px; }
-        #settings-section { scroll-margin-top: 120px; }
-
-        /* Mobil responsive */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .header {
-                padding: 8px 12px;
-                gap: 10px;
+                padding: 10px 15px;
+                height: 70px;
             }
-            .logo-container {
-                width: 100%;
-                justify-content: center;
-            }
-            .header-right {
-                width: 100%;
-                justify-content: flex-end;
-                gap: 10px;
+            .header.scrolled {
+                height: 50px;
             }
             .logo {
                 height: 40px;
-                margin-right: 8px;
-            }
-            .profile-toggle {
-                width: 36px;
-                height: 36px;
-                font-size: 1.6rem;
-            }
-            .logout-btn {
-                font-size: 1rem;
-                padding: 6px 10px;
-            }
-            .dropdown-menu {
-                min-width: 200px;
-                right: -10px;
             }
             .back-btn {
-                top: 90px;
-                left: 10px;
-                padding: 8px 12px;
+                top: 80px;
+                left: 15px;
+                padding: 10px 15px;
                 font-size: 0.9rem;
             }
             .container {
-                margin: 100px auto 20px;
-                padding: 0 10px;
-            }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .lang-buttons {
-                justify-content: center;
-            }
-            .btn-action {
-                width: 100%;
-                margin: 5px 0;
-            }
-            .chatbot-btn {
-                font-size: 1.1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header-right {
-                gap: 8px;
-            }
-            .logo {
-                height: 35px;
+                margin: 100px auto 30px;
+                padding: 0 15px;
             }
             .stats-grid {
                 grid-template-columns: 1fr;
             }
-            .card-body {
-                padding: 15px;
-            }
             .lang-buttons {
-                flex-direction: column;
+                justify-content: center;
             }
         }
     </style>
 </head>
 
 <body>
-    <header class="header">
+    <!-- ===== HEADER ===== -->
+    <header class="header" id="header">
         <div class="logo-container" onclick="window.location.href='stations.html'">
             <img src="railsafe.png" alt="RailSafe Logo" class="logo">
             <img src="iconr.png" alt="Partner Logo 1" class="logo">
             <img src="tstu.png" alt="Partner Logo 2" class="logo">
         </div>
         <div class="header-right">
-            <button class="profile-toggle" onclick="toggleProfileMenu()" title="Profil va Bo'limlar">👤</button>
+            <button class="profile-toggle" onclick="toggleProfileMenu()" title="Profil va Bo'limlar">
+                <i class="fas fa-user"></i>
+            </button>
             <div class="dropdown-menu" id="profile-dropdown">
-                <a href="profil.html#profile-section" class="dropdown-item" onclick="scrollToSection('profile'); toggleProfileMenu()">👤 Mening Profil</a>
-                <a href="profil.html#settings-section" class="dropdown-item" onclick="scrollToSection('settings'); toggleProfileMenu()">⚙️ Sozlamalar</a>
-                <a href="chatbot.html" class="dropdown-item" onclick="toggleProfileMenu()">💬 AI Chatbot</a>
+                <a href="#profile-section" class="dropdown-item" onclick="scrollToSection('profile-section')">
+                    <i class="fas fa-user"></i> Mening Profil
+                </a>
+                <a href="#settings-section" class="dropdown-item" onclick="scrollToSection('settings-section')">
+                    <i class="fas fa-cog"></i> Sozlamalar
+                </a>
+                <a href="chatbot.html" class="dropdown-item">
+                    <i class="fas fa-robot"></i> AI Chatbot
+                </a>
             </div>
             <a href="note.html" class="notification-bell" title="Bildirishnomalar">
-                <span class="notification-badge">3</span>🔔
+                <span class="notification-badge">3</span>
+                <i class="fas fa-bell"></i>
             </a>
-            <button class="logout-btn" onclick="confirmLogout()">Chiqish</button>
+            <button class="logout-btn" onclick="confirmLogout()">
+                <i class="fas fa-sign-out-alt"></i> Chiqish
+            </button>
         </div>
     </header>
 
-    <button class="back-btn" onclick="window.location='stations.html'" aria-label="Back" id="back-btn">
+    <!-- ===== BACK BUTTON ===== -->
+    <button class="back-btn" onclick="window.location='stations.html'">
         <i class="fas fa-arrow-left"></i> Orqaga
     </button>
 
+    <!-- ===== MAIN CONTENT ===== -->
     <div class="container">
-        <div id="profile-section">
+        <!-- ===== PROFILE SECTION ===== -->
+        <section id="profile-section">
             <div class="card">
-                <div class="card-header" id="personal-info-header">Shaxsiy ma'lumotlar</div>
+                <div class="card-header">
+                    <h3>Shaxsiy Ma'lumotlar</h3>
+                </div>
                 <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><i class="fas fa-user"></i> <span id="profile-name">Irgashev</span></li>
-                        <li class="list-group-item"><i class="fas fa-briefcase"></i> <span id="profile-role">Tarmoq administratori</span></li>
-                        <li class="list-group-item"><i class="fas fa-building"></i> <span id="profile-department">Texnik bo'lim</span></li>
-                        <li class="list-group-item"><i class="fas fa-phone"></i> <span id="profile-phone">+998 90 123 45 67</span></li>
-                        <li class="list-group-item"><i class="fas fa-envelope"></i> <span id="profile-email">irgashev@example.com</span></li>
-                        <li class="list-group-item"><i class="fas fa-calendar-alt"></i> <span id="profile-join-date">2020-yil, 15-yanvar</span></li>
-                    </ul>
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <div class="profile-avatar" style="width: 120px; height: 120px; border-radius: 50%; background: #eee; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #666;">
+                                👤
+                            </div>
+                            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editAvatarModal">
+                                <i class="fas fa-camera"></i> Rasmni o'zgartirish
+                            </button>
+                        </div>
+                        <div class="col-md-8">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <i class="fas fa-user"></i>
+                                    <span><strong>Ism:</strong> <span id="profile-name">Irgashev Abdulla</span></span>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-briefcase"></i>
+                                    <span><strong>Lavozim:</strong> <span id="profile-role">Tarmoq Administratori</span></span>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-building"></i>
+                                    <span><strong>Bo'lim:</strong> <span id="profile-department">Texnik Bo'lim</span></span>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-phone"></i>
+                                    <span><strong>Telefon:</strong> <span id="profile-phone">+998 90 123 45 67</span></span>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <span><strong>Email:</strong> <span id="profile-email">irgashev@example.com</span></span>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span><strong>Ishga qabul sanasi:</strong> <span id="profile-join-date">2020-yil, 15-yanvar</span></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            <i class="fas fa-edit"></i> Ma'lumotlarni Tahrirlash
+                        </button>
+                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                            <i class="fas fa-lock"></i> Parolni O'zgartirish
+                        </button>
+                    </div>
                 </div>
             </div>
 
+            <!-- ===== PERMISSIONS CARD ===== -->
             <div class="card">
-                <div class="card-header" id="permissions-header">Tizim huquqlari</div>
+                <div class="card-header">
+                    <h3>Tizim Huquqlari</h3>
+                </div>
                 <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><i class="fas fa-eye"></i> <span id="perm-view-stations">Stansiyalarni ko'rish</span></li>
-                        <li class="list-group-item"><i class="fas fa-bell"></i> <span id="perm-manage-alerts">Ogohlantirishlarni boshqarish</span></li>
-                        <li class="list-group-item"><i class="fas fa-file-export"></i> <span id="perm-export-reports">Hisobotlarni eksport qilish</span></li>
-                        <li class="list-group-item"><i class="fas fa-cog"></i> <span id="perm-edit-settings">Sozlamalarni o'zgartirish</span></li>
-                    </ul>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <i class="fas fa-eye text-success"></i>
+                                    <span>Stansiyalarni ko'rish</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-bell text-warning"></i>
+                                    <span>Ogohlantirishlarni boshqarish</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <i class="fas fa-file-export text-info"></i>
+                                    <span>Hisobotlarni eksport qilish</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-cog text-primary"></i>
+                                    <span>Sozlamalarni o'zgartirish</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- ===== STATISTICS CARD ===== -->
             <div class="card">
-                <div class="card-header" id="stats-header">Faoliyat statistikasi</div>
+                <div class="card-header">
+                    <h3>Faoliyat Statistikasi</h3>
+                </div>
                 <div class="card-body">
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <h5>1,247</h5>
-                            <p id="stats-checked-stations">Tekshirilgan stansiyalar</p>
+                            <h3>1,247</h3>
+                            <p>Tekshirilgan stansiyalar</p>
                         </div>
                         <div class="stat-card">
-                            <h5>89</h5>
-                            <p id="stats-resolved-issues">Hal qilingan muammolar</p>
+                            <h3>89</h3>
+                            <p>Hal qilingan muammolar</p>
                         </div>
                         <div class="stat-card">
-                            <h5>156</h5>
-                            <p id="stats-generated-reports">Yaratilgan hisobotlar</p>
+                            <h3>156</h3>
+                            <p>Yaratilgan hisobotlar</p>
                         </div>
                         <div class="stat-card">
-                            <h5>99.2%</h5>
-                            <p id="stats-system-efficiency">Tizim samaradorligi</p>
+                            <h3>99.2%</h3>
+                            <p>Tizim samaradorligi</p>
                         </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="activityChart"></canvas>
                     </div>
                 </div>
             </div>
 
-            <div class="text-center">
-                <button class="btn btn-primary btn-action" data-bs-toggle="modal" data-bs-target="#editProfileModal" aria-label="Edit Profile" id="edit-profile-btn">
-                    <i class="fas fa-edit"></i> Ma'lumotlarni tahrirlash
-                </button>
-                <button class="btn btn-warning btn-action" data-bs-toggle="modal" data-bs-target="#changePasswordModal" aria-label="Change Password" id="change-password-btn">
-                    <i class="fas fa-lock"></i> Parolni o'zgartirish
-                </button>
-            </div>
-        </div>
-
-        <div id="settings-section">
+            <!-- ===== ACTIVITY HISTORY ===== -->
             <div class="card">
-                <div class="card-header" id="settings-header">Tizim sozlamalari</div>
+                <div class="card-header">
+                    <h3>Faoliyat Tarixi</h3>
+                </div>
                 <div class="card-body">
-                    <div class="lang-section">
-                        <label>Til / Язык / Language</label>
-                        <div class="lang-buttons">
-                            <button class="lang-btn-settings active" data-lang="uz" onclick="setLanguage('uz')">UZB</button>
-                            <button class="lang-btn-settings" data-lang="ru" onclick="setLanguage('ru')">RUS</button>
-                            <button class="lang-btn-settings" data-lang="en" onclick="setLanguage('en')">ENG</button>
-                        </div>
-                    </div>
-
-                    <div class="theme-section">
-                        <label>Reja / Тема / Theme</label>
-                        <div class="theme-toggle">
-                            <span>Dark Mode / Темная тема</span>
-                            <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
-                        </div>
-                    </div>
-
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
-                        <label class="form-check-label" for="emailNotifications" id="settings-email-notifications">Email bildirishnomalar</label>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" id="smsNotifications">
-                        <label class="form-check-label" for="smsNotifications" id="settings-sms-notifications">SMS ogohlantirishlar</label>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" id="autoReports">
-                        <label class="form-check-label" for="autoReports" id="settings-auto-reports">Avtomatik hisobotlar</label>
-                    </div>
-
-                    <div class="chatbot-section">
-                        <h6>AI Chatbot</h6>
-                        <p>Savollaringizni AI yordamida hal qiling. Tezkor maslahatlar va yordam.</p>
-                        <button class="chatbot-btn" onclick="window.location.href='chatbot.html'">Chatbotni ochish 💬</button>
-                    </div>
+                    <table class="activity-table">
+                        <thead>
+                            <tr>
+                                <th>Sana</th>
+                                <th>Amal</th>
+                                <th>Tafsilotlar</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2025-12-10</td>
+                                <td>Stansiya tekshiruvi</td>
+                                <td>Kattakurgan blok-posti</td>
+                                <td><span class="badge bg-success">Muvaffaqiyatli</span></td>
+                            </tr>
+                            <tr>
+                                <td>2025-12-09</td>
+                                <td>Muammoni hal qilish</td>
+                                <td>Harorat sensorining xatosi</td>
+                                <td><span class="badge bg-success">Muvaffaqiyatli</span></td>
+                            </tr>
+                            <tr>
+                                <td>2025-12-08</td>
+                                <td>Hisobot yaratish</td>
+                                <td>Oylik hisobot</td>
+                                <td><span class="badge bg-success">Muvaffaqiyatli</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- ===== SETTINGS SECTION ===== -->
+        <section id="settings-section" class="settings-section">
+            <div class="settings-card">
+                <h4>Tizim Sozlamalari</h4>
+                <div class="lang-section">
+                    <label>Til / Язык / Language</label>
+                    <div class="lang-buttons">
+                        <button class="lang-btn active" data-lang="uz" onclick="setLanguage('uz')">UZB</button>
+                        <button class="lang-btn" data-lang="ru" onclick="setLanguage('ru')">RUS</button>
+                        <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">ENG</button>
+                    </div>
+                </div>
+
+                <div class="theme-section">
+                    <label>Reja / Тема / Theme</label>
+                    <div class="theme-toggle">
+                        <span>Dark Mode / Темная тема</span>
+                        <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+                    </div>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                    <label class="form-check-label" for="emailNotifications">Email bildirishnomalar</label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="smsNotifications">
+                    <label class="form-check-label" for="smsNotifications">SMS ogohlantirishlar</label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="autoReports">
+                    <label class="form-check-label" for="autoReports">Avtomatik hisobotlar</label>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <h4>Xavfsizlik Sozlamalari</h4>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="twoFactorAuth">
+                    <label class="form-check-label" for="twoFactorAuth">Ikkita omilli autentifikatsiya</label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="loginAlerts" checked>
+                    <label class="form-check-label" for="loginAlerts">Kirish haqida ogohlantirishlar</label>
+                </div>
+                <button class="btn btn-danger mt-3" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                    <i class="fas fa-trash"></i> Akkauntni o'chirish
+                </button>
+            </div>
+        </section>
     </div>
 
+    <!-- ===== MODALS ===== -->
     <!-- Edit Profile Modal -->
-    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content" style="background: var(--card-bg); color: var(--text-color);">
-                <div class="modal-header" style="background: var(--header-bg); color: var(--header-text); border-bottom: 1px solid var(--border-color);">
-                    <h5 class="modal-title" id="editProfileModalLabel">Ma'lumotlarni tahrirlash</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="edit-modal-close-btn"></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ma'lumotlarni Tahrirlash</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="edit-modal-body">
-                    Ma'lumotlarni tahrirlash funksiyasi keyinroq qo'shiladi.
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="editName" class="form-label">Ism</label>
+                            <input type="text" class="form-control" id="editName" value="Irgashev Abdulla">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRole" class="form-label">Lavozim</label>
+                            <input type="text" class="form-control" id="editRole" value="Tarmoq Administratori">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhone" class="form-label">Telefon</label>
+                            <input type="text" class="form-control" id="editPhone" value="+998 90 123 45 67">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editEmail" value="irgashev@example.com">
+                        </div>
+                    </form>
                 </div>
-                <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="edit-modal-close">Yopish</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bekor qilish</button>
+                    <button type="button" class="btn btn-primary" onclick="saveProfileChanges()">Saqlash</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Change Password Modal -->
-    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content" style="background: var(--card-bg); color: var(--text-color);">
-                <div class="modal-header" style="background: var(--header-bg); color: var(--header-text); border-bottom: 1px solid var(--border-color);">
-                    <h5 class="modal-title" id="changePasswordModalLabel">Parolni o'zgartirish</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="password-modal-close-btn"></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Parolni O'zgartirish</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="password-modal-body">
-                    Parolni o'zgartirish funksiyasi keyinroq qo'shiladi.
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="currentPassword" class="form-label">Joriy Parol</label>
+                            <input type="password" class="form-control" id="currentPassword">
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">Yangi Parol</label>
+                            <input type="password" class="form-control" id="newPassword">
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Parolni Tasdiqlash</label>
+                            <input type="password" class="form-control" id="confirmPassword">
+                        </div>
+                    </form>
                 </div>
-                <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="password-modal-close">Yopish</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bekor qilish</button>
+                    <button type="button" class="btn btn-primary" onclick="changePassword()">Saqlash</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Edit Avatar Modal -->
+    <div class="modal fade" id="editAvatarModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rasmni O'zgartirish</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <div style="width: 150px; height: 150px; border-radius: 50%; background: #eee; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: #666;">
+                            👤
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" class="form-control" id="avatarUpload">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bekor qilish</button>
+                    <button type="button" class="btn btn-primary" onclick="saveAvatar()">Saqlash</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Akkauntni O'chirish</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Akkauntingizni o'chirishni xohlaysizmi? Bu jarayon qaytarib bo'lmaydi.</p>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="confirmDelete">
+                        <label class="form-check-label" for="confirmDelete">Men akkauntimni o'chirishni tasdiqlayman</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bekor qilish</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteAccount()">O'chirish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
-        const translations = {
-            uz: {
-                title: "RailSafe - Profil",
-                back_btn: "Orqaga",
-                back_btn_aria: "Orqaga qaytish",
-                personal_info_header: "Shaxsiy ma'lumotlar",
-                profile_name: "Irgashev",
-                profile_role: "Tarmoq administratori",
-                profile_department: "Texnik bo'lim",
-                profile_phone: "+998 90 123 45 67",
-                profile_email: "irgashev@example.com",
-                profile_join_date: "2020-yil, 15-yanvar",
-                permissions_header: "Tizim huquqlari",
-                perm_view_stations: "Stansiyalarni ko'rish",
-                perm_manage_alerts: "Ogohlantirishlarni boshqarish",
-                perm_export_reports: "Hisobotlarni eksport qilish",
-                perm_edit_settings: "Sozlamalarni o'zgartirish",
-                stats_header: "Faoliyat statistikasi",
-                stats_checked_stations: "Tekshirilgan stansiyalar",
-                stats_resolved_issues: "Hal qilingan muammolar",
-                stats_generated_reports: "Yaratilgan hisobotlar",
-                stats_system_efficiency: "Tizim samaradorligi",
-                settings_header: "Tizim sozlamalari",
-                settings_email_notifications: "Email bildirishnomalar",
-                settings_sms_notifications: "SMS ogohlantirishlar",
-                settings_auto_reports: "Avtomatik hisobotlar",
-                chatbot_title: "AI Chatbot",
-                chatbot_desc: "Savollaringizni AI yordamida hal qiling. Tezkor maslahatlar va yordam.",
-                chatbot_btn: "Chatbotni ochish 💬",
-                edit_profile_btn: "Ma'lumotlarni tahrirlash",
-                edit_profile_aria: "Ma'lumotlarni tahrirlash",
-                change_password_btn: "Parolni o'zgartirish",
-                change_password_aria: "Parolni o'zgartirish",
-                logout_btn: "Chiqish",
-                logout_aria: "Tizimdan chiqish",
-                confirm_logout: "Haqiqatdan ham tizimdan chiqmoqchimisiz?",
-                edit_modal_title: "Ma'lumotlarni tahrirlash",
-                edit_modal_body: "Ma'lumotlarni tahrirlash funksiyasi keyinroq qo'shiladi.",
-                edit_modal_close: "Yopish",
-                edit_modal_close_aria: "Yopish",
-                password_modal_title: "Parolni o'zgartirish",
-                password_modal_body: "Parolni o'zgartirish funksiyasi keyinroq qo'shiladi.",
-                password_modal_close: "Yopish",
-                password_modal_close_aria: "Yopish",
-                lang_label: "Til / Язык / Language",
-                theme_label: "Reja / Тема / Theme"
-            },
-            ru: {
-                title: "RailSafe - Профиль",
-                back_btn: "Назад",
-                back_btn_aria: "Вернуться назад",
-                personal_info_header: "Личные данные",
-                profile_name: "Иргашев",
-                profile_role: "Сетевой администратор",
-                profile_department: "Технический отдел",
-                profile_phone: "+998 90 123 45 67",
-                profile_email: "irgashev@example.com",
-                profile_join_date: "15 января 2020 года",
-                permissions_header: "Права в системе",
-                perm_view_stations: "Просмотр станций",
-                perm_manage_alerts: "Управление уведомлениями",
-                perm_export_reports: "Экспорт отчетов",
-                perm_edit_settings: "Изменение настроек",
-                stats_header: "Статистика деятельности",
-                stats_checked_stations: "Проверенные станции",
-                stats_resolved_issues: "Решенные проблемы",
-                stats_generated_reports: "Созданные отчеты",
-                stats_system_efficiency: "Эффективность системы",
-                settings_header: "Настройки системы",
-                settings_email_notifications: "Уведомления по email",
-                settings_sms_notifications: "SMS-уведомления",
-                settings_auto_reports: "Автоматические отчеты",
-                chatbot_title: "AI Чатбот",
-                chatbot_desc: "Решайте свои вопросы с помощью ИИ. Быстрые советы и помощь.",
-                chatbot_btn: "Открыть чатбот 💬",
-                edit_profile_btn: "Редактировать данные",
-                edit_profile_aria: "Редактировать профиль",
-                change_password_btn: "Сменить пароль",
-                change_password_aria: "Сменить пароль",
-                logout_btn: "Выход",
-                logout_aria: "Выйти из системы",
-                confirm_logout: "Вы действительно хотите выйти из системы?",
-                edit_modal_title: "Редактировать данные",
-                edit_modal_body: "Функция редактирования данных будет добавлена позже.",
-                edit_modal_close: "Закрыть",
-                edit_modal_close_aria: "Закрыть",
-                password_modal_title: "Сменить пароль",
-                password_modal_body: "Функция смены пароля будет добавлена позже.",
-                password_modal_close: "Закрыть",
-                password_modal_close_aria: "Закрыть",
-                lang_label: "Язык / Til / Language",
-                theme_label: "Тема / Reja / Theme"
-            },
-            en: {
-                title: "RailSafe - Profile",
-                back_btn: "Back",
-                back_btn_aria: "Go back",
-                personal_info_header: "Personal Information",
-                profile_name: "Irgashev",
-                profile_role: "Network Administrator",
-                profile_department: "Technical Department",
-                profile_phone: "+998 90 123 45 67",
-                profile_email: "irgashev@example.com",
-                profile_join_date: "January 15, 2020",
-                permissions_header: "System Permissions",
-                perm_view_stations: "View Stations",
-                perm_manage_alerts: "Manage Alerts",
-                perm_export_reports: "Export Reports",
-                perm_edit_settings: "Edit Settings",
-                stats_header: "Activity Statistics",
-                stats_checked_stations: "Checked Stations",
-                stats_resolved_issues: "Resolved Issues",
-                stats_generated_reports: "Generated Reports",
-                stats_system_efficiency: "System Efficiency",
-                settings_header: "System Settings",
-                settings_email_notifications: "Email Notifications",
-                settings_sms_notifications: "SMS Notifications",
-                settings_auto_reports: "Automatic Reports",
-                chatbot_title: "AI Chatbot",
-                chatbot_desc: "Solve your questions with AI. Quick tips and assistance.",
-                chatbot_btn: "Open Chatbot 💬",
-                edit_profile_btn: "Edit Profile",
-                edit_profile_aria: "Edit Profile",
-                change_password_btn: "Change Password",
-                change_password_aria: "Change Password",
-                logout_btn: "Logout",
-                logout_aria: "Log out of the system",
-                confirm_logout: "Are you sure you want to log out?",
-                edit_modal_title: "Edit Profile",
-                edit_modal_body: "Profile editing function will be added later.",
-                edit_modal_close: "Close",
-                edit_modal_close_aria: "Close",
-                password_modal_title: "Change Password",
-                password_modal_body: "Password change function will be added later.",
-                password_modal_close: "Close",
-                password_modal_close_aria: "Close",
-                lang_label: "Language / Til / Язык",
-                theme_label: "Theme / Reja / Тема"
+        // ===== HEADER SCROLL ANIMATION =====
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
             }
-        };
+        });
 
-        let currentLang = localStorage.getItem('language') || 'uz';
-        let currentTheme = localStorage.getItem('theme') || 'light';
-
-        function setLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('language', lang);
-            document.querySelectorAll('.lang-btn-settings').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-            });
-            document.documentElement.lang = lang;
-            document.title = translations[lang].title;
-            document.getElementById('back-btn').innerHTML = `<i class="fas fa-arrow-left"></i> ${translations[lang].back_btn}`;
-            document.getElementById('back-btn').setAttribute('aria-label', translations[lang].back_btn_aria);
-            document.getElementById('personal-info-header').textContent = translations[lang].personal_info_header;
-            document.getElementById('profile-name').textContent = localStorage.getItem('username') || translations[lang].profile_name;
-            document.getElementById('profile-role').textContent = translations[lang].profile_role;
-            document.getElementById('profile-department').textContent = translations[lang].profile_department;
-            document.getElementById('profile-phone').textContent = translations[lang].profile_phone;
-            document.getElementById('profile-email').textContent = translations[lang].profile_email;
-            document.getElementById('profile-join-date').textContent = translations[lang].profile_join_date;
-            document.getElementById('permissions-header').textContent = translations[lang].permissions_header;
-            document.getElementById('perm-view-stations').textContent = translations[lang].perm_view_stations;
-            document.getElementById('perm-manage-alerts').textContent = translations[lang].perm_manage_alerts;
-            document.getElementById('perm-export-reports').textContent = translations[lang].perm_export_reports;
-            document.getElementById('perm-edit-settings').textContent = translations[lang].perm_edit_settings;
-            document.getElementById('stats-header').textContent = translations[lang].stats_header;
-            document.getElementById('stats-checked-stations').textContent = translations[lang].stats_checked_stations;
-            document.getElementById('stats-resolved-issues').textContent = translations[lang].stats_resolved_issues;
-            document.getElementById('stats-generated-reports').textContent = translations[lang].stats_generated_reports;
-            document.getElementById('stats-system-efficiency').textContent = translations[lang].stats_system_efficiency;
-            document.getElementById('settings-header').textContent = translations[lang].settings_header;
-            document.getElementById('settings-email-notifications').textContent = translations[lang].settings_email_notifications;
-            document.getElementById('settings-sms-notifications').textContent = translations[lang].settings_sms_notifications;
-            document.getElementById('settings-auto-reports').textContent = translations[lang].settings_auto_reports;
-            document.querySelector('.lang-section label').textContent = translations[lang].lang_label;
-            document.querySelector('.theme-section label').textContent = translations[lang].theme_label;
-            document.querySelector('.chatbot-section h6').textContent = translations[lang].chatbot_title;
-            document.querySelector('.chatbot-section p').textContent = translations[lang].chatbot_desc;
-            document.querySelector('.chatbot-btn').textContent = translations[lang].chatbot_btn;
-            document.getElementById('edit-profile-btn').innerHTML = `<i class="fas fa-edit"></i> ${translations[lang].edit_profile_btn}`;
-            document.getElementById('edit-profile-btn').setAttribute('aria-label', translations[lang].edit_profile_aria);
-            document.getElementById('change-password-btn').innerHTML = `<i class="fas fa-lock"></i> ${translations[lang].change_password_btn}`;
-            document.getElementById('change-password-btn').setAttribute('aria-label', translations[lang].change_password_aria);
-            document.querySelector('.logout-btn').textContent = translations[lang].logout_btn;
-            document.querySelector('.logout-btn').setAttribute('aria-label', translations[lang].logout_aria);
-            document.getElementById('editProfileModalLabel').textContent = translations[lang].edit_modal_title;
-            document.getElementById('edit-modal-body').textContent = translations[lang].edit_modal_body;
-            document.getElementById('edit-modal-close').textContent = translations[lang].edit_modal_close;
-            document.getElementById('edit-modal-close-btn').setAttribute('aria-label', translations[lang].edit_modal_close_aria);
-            document.getElementById('changePasswordModalLabel').textContent = translations[lang].password_modal_title;
-            document.getElementById('password-modal-body').textContent = translations[lang].password_modal_body;
-            document.getElementById('password-modal-close').textContent = translations[lang].password_modal_close;
-            document.getElementById('password-modal-close-btn').setAttribute('aria-label', translations[lang].password_modal_close_aria);
-        }
-
-        function toggleTheme() {
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            const newTheme = isDark ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            document.getElementById('theme-toggle').checked = !isDark;
-        }
-
+        // ===== DROPDOWN MENU =====
         function toggleProfileMenu() {
             const menu = document.getElementById('profile-dropdown');
             menu.classList.toggle('show');
         }
 
-        function scrollToSection(section) {
-            const element = document.getElementById(`${section}-section`);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
+        // ===== SCROLL TO SECTION =====
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
             }
         }
 
+        // ===== THEME TOGGLE =====
+        function toggleTheme() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // ===== LANGUAGE SWITCH =====
+        function setLanguage(lang) {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.lang-btn[data-lang="${lang}"]`).classList.add('active');
+            localStorage.setItem('language', lang);
+        }
+
+        // ===== CHARTS =====
+        function initializeCharts() {
+            const ctx = document.getElementById('activityChart').getContext('2d');
+            const activityChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun'],
+                    datasets: [{
+                        label: 'Faoliyat',
+                        data: [12, 19, 3, 5, 2, 3],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(153, 102, 255, 0.7)',
+                            'rgba(255, 159, 64, 0.7)',
+                            'rgba(255, 99, 132, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // ===== MODAL FUNCTIONS =====
+        function saveProfileChanges() {
+            const name = document.getElementById('editName').value;
+            const role = document.getElementById('editRole').value;
+            const phone = document.getElementById('editPhone').value;
+            const email = document.getElementById('editEmail').value;
+
+            document.getElementById('profile-name').textContent = name;
+            document.getElementById('profile-role').textContent = role;
+            document.getElementById('profile-phone').textContent = phone;
+            document.getElementById('profile-email').textContent = email;
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+            modal.hide();
+        }
+
+        function changePassword() {
+            alert('Parol muvaffaqiyatli o\'zgartirildi!');
+            const modal = bootstrap.Modal.getInstance(document.getElementById('changePasswordModal'));
+            modal.hide();
+        }
+
+        function saveAvatar() {
+            alert('Rasm muvaffaqiyatli saqlandi!');
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editAvatarModal'));
+            modal.hide();
+        }
+
+        function deleteAccount() {
+            if (document.getElementById('confirmDelete').checked) {
+                alert('Akkaunt muvaffaqiyatli o\'chirildi!');
+                localStorage.clear();
+                window.location.href = 'index.html';
+            } else {
+                alert('Iltimos, tasdiqlashni belgilang!');
+            }
+        }
+
+        // ===== LOGOUT =====
         function confirmLogout() {
-            if (confirm(translations[currentLang].confirm_logout)) {
+            if (confirm('Haqiqatdan ham tizimdan chiqmoqchimisiz?')) {
                 localStorage.clear();
                 window.location.href = 'index.html';
             }
         }
 
-        function initializePage() {
-            setLanguage(currentLang);
-            document.documentElement.setAttribute('data-theme', currentTheme);
-            document.getElementById('theme-toggle').checked = currentTheme === 'dark';
-            document.querySelectorAll('.lang-btn-settings').forEach(btn => {
-                btn.addEventListener('click', () => setLanguage(btn.getAttribute('data-lang')));
-            });
-            if (window.location.hash) {
-                const hash = window.location.hash.substring(1);
-                scrollToSection(hash.replace('-section', ''));
-            }
-            document.addEventListener('click', function(event) {
+        // ===== INITIALIZE PAGE =====
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-toggle').checked = savedTheme === 'dark';
+
+            const savedLang = localStorage.getItem('language') || 'uz';
+            setLanguage(savedLang);
+
+            initializeCharts();
+
+            document.addEventListener('click', (e) => {
                 const menu = document.getElementById('profile-dropdown');
                 const toggle = document.querySelector('.profile-toggle');
-                if (!toggle.contains(event.target) && !menu.contains(event.target)) {
+                if (!toggle.contains(e.target) && !menu.contains(e.target)) {
                     menu.classList.remove('show');
                 }
             });
-        }
-
-        document.addEventListener('DOMContentLoaded', initializePage);
+        });
     </script>
 </body>
-
 
 </html>
